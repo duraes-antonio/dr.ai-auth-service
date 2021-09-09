@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/dr.ai-identity-server.iml" filepath="$PROJECT_DIR$/.idea/dr.ai-identity-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dr.ai-auth-service.iml" filepath="$PROJECT_DIR$/.idea/dr.ai-auth-service.iml" />
     </modules>
   </component>
 </project>

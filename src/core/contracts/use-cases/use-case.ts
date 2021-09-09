@@ -1,5 +1,3 @@
-interface UseCase<TIn, TOut> {
-    handle(input?: TIn): Promise<TIn> | TIn;
-}
+type UseCase<TIn, TOut> = (input?: TIn) => Promise<TOut> | TOut;
 
-export { UseCase };
+export {UseCase};

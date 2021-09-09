@@ -1,16 +1,16 @@
-import { UseCase } from '../../../../../core/contracts/use-cases/use-case';
+import {UseCase} from '../../../../../core/contracts/use-cases/use-case';
 
-interface AddUserInput {
-    name: string;
-    email: string;
-    password: string;
-    image: File;
+type AddUserInput = {
+	name: string;
+	email: string;
+	password: string;
+	image: File;
 }
 
-interface AddUserOutput {
-    token: string;
+type AddUserOutput = {
+	token: string;
 }
 
-interface RegisterUser extends UseCase<AddUserInput, any> {}
+type RegisterUser = UseCase<AddUserInput, AddUserOutput>;
 
-export {};
+export {AddUserInput, AddUserOutput, RegisterUser};
