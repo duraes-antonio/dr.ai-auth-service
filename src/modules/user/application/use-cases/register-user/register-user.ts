@@ -1,16 +1,13 @@
-import {UseCase} from '../../../../../core/contracts/use-cases/use-case';
+import {AddUserOutput, RegisterUser} from '../../../core/use-cases/register-user/register-user';
+import {RequiredError} from '../../../../../core/errors/required';
 
-type AddUserInput = {
-	name: string;
-	email: string;
-	password: string;
-	image: File;
+const RegisterUserCase: RegisterUser = (input): AddUserOutput => {
+
+	if (!input) {
+		throw new RequiredError('input');
+	}
+
+	return undefined
 }
 
-type AddUserOutput = {
-	token: string;
-}
-
-type RegisterUser = UseCase<AddUserInput, AddUserOutput>;
-
-export {AddUserInput, AddUserOutput, RegisterUser};
+export {RegisterUserCase}
