@@ -1,5 +1,5 @@
 import { User } from '../entities/user.model';
-import { AddUserInput } from '../use-cases/register-user/register-user';
+import { AddUserInput } from '../use-cases/register-user';
 
 type FindUserByEmail = (email: string) => Promise<User> | undefined;
 

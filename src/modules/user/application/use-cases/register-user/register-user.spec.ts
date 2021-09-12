@@ -1,6 +1,6 @@
 import { RegisterUserCase } from './register-user';
 import { RequiredError } from '../../../../../core/errors/required';
-import { AddUserInput } from '../../../core/use-cases/register-user/register-user';
+import { AddUserInput } from '../../../core/use-cases/register-user';
 import {
     InvalidEmail,
     InvalidFormat,

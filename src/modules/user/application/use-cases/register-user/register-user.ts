@@ -1,7 +1,7 @@
 import {
     AddUserInput,
     IRegisterUser,
-} from '../../../core/use-cases/register-user/register-user';
+} from '../../../core/use-cases/register-user';
 import { RequiredError } from '../../../../../core/errors/required';
 import { EmailValidator } from '../../../../../core/contracts/validation/validators/email.validator';
 import { EmailAddress } from '../../../../../core/value-objects/emai/email';
