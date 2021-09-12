@@ -1,8 +1,13 @@
 import { User } from '../entities/user.model';
 import { AddUserInput } from '../use-cases/register-user';
 
-type FindUserByEmail = (email: string) => Promise<User> | undefined;
+export type UserForUpdate = {
+    imageUrl?: string;
+    name?: string;
+};
 
-type PersistUser = (user: AddUserInput) => Promise<string>;
+export type FindUserByEmail = (email: string) => Promise<User> | undefined;
 
-export { FindUserByEmail, PersistUser };
+export type PersistUser = (user: AddUserInput) => Promise<string>;
+
+export type UpdateUser = (user: UserForUpdate) => Promise<void>;
