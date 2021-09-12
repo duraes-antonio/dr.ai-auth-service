@@ -14,6 +14,6 @@ export type AddUserOutput = {
 
 export type RegisterUserType = UseCase<AddUserInput, User>;
 
-export interface RegisterUser {
+export interface IRegisterUserCase {
     execute: RegisterUserType;
 }

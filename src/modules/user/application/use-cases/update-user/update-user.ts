@@ -1,6 +1,6 @@
 import { UpdateUser } from '../../../core/repositories/user.repository';
 import {
-    UpdateUserCase as IUpdateUserCase,
+    IUpdateUserCase as IUpdateUserCase,
     UpdateUserInput,
 } from '../../../core/use-cases/update-user';
 import { FileStorage } from '../../../../../ports/file-storage/file-storage';

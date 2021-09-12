@@ -1,11 +1,17 @@
-import { AddUserInput } from '../../core/use-cases/register-user';
-import { RegisterUserCase } from '../../application/use-cases/register-user/register-user';
+import {
+    AddUserInput,
+    IRegisterUserCase,
+} from '../../core/use-cases/register-user';
 import { TokenGenerator } from '../../../../ports/token/token';
-import { UpdateUserInput } from '../../core/use-cases/update-user';
+import {
+    IUpdateUserCase,
+    UpdateUserInput,
+} from '../../core/use-cases/update-user';
 
 class UserController {
     constructor(
-        private readonly useCase: RegisterUserCase,
+        private readonly registerCase: IRegisterUserCase,
+        private readonly updateCase: IUpdateUserCase,
         private readonly tokenGenerator: TokenGenerator
     ) {}
 
@@ -14,7 +20,7 @@ class UserController {
         tokenSecretKey: string,
         tokenExpiresIn?: number
     ): Promise<string> {
-        const userRegistered = await this.useCase.execute(userData);
+        const userRegistered = await this.registerCase.execute(userData);
         return await this.tokenGenerator({
             data: userRegistered,
             expiresIn: tokenExpiresIn,
@@ -22,7 +28,9 @@ class UserController {
         });
     }
 
-    async update(input: UpdateUserInput): Promise<void> {}
+    async update(input: UpdateUserInput): Promise<void> {
+        await this.updateCase.execute(input);
+    }
 }
 
 export { UserController };

@@ -1,6 +1,6 @@
 import {
     AddUserInput,
-    RegisterUser,
+    IRegisterUserCase,
 } from '../../../core/use-cases/register-user';
 import { RequiredError } from '../../../../../core/errors/required';
 import { EmailValidator } from '../../../../../core/contracts/validation/validators/email.validator';
@@ -15,7 +15,7 @@ import { ConflictError } from '../../../../../core/errors/conflict';
 import { HashGenerator } from '../../../../../ports/hash-manager/hash-manager';
 import { User } from '../../../core/entities/user.model';
 
-class RegisterUserCase implements RegisterUser {
+class RegisterUserCase implements IRegisterUserCase {
     constructor(
         private readonly emailValidator: EmailValidator,
         private readonly findUser: FindUserByEmail,
