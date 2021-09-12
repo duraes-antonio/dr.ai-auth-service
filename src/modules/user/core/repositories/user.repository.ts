@@ -3,6 +3,6 @@ import { AddUserInput } from '../use-cases/register-user';
 
 type FindUserByEmail = (email: string) => Promise<User> | undefined;
 
-type PersistUser = (user: AddUserInput) => Promise<void>;
+type PersistUser = (user: AddUserInput) => Promise<string>;
 
 export { FindUserByEmail, PersistUser };

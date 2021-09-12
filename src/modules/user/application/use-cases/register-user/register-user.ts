@@ -1,6 +1,6 @@
 import {
     AddUserInput,
-    IRegisterUser,
+    RegisterUser,
 } from '../../../core/use-cases/register-user';
 import { RequiredError } from '../../../../../core/errors/required';
 import { EmailValidator } from '../../../../../core/contracts/validation/validators/email.validator';
@@ -13,8 +13,9 @@ import {
 } from '../../../core/repositories/user.repository';
 import { ConflictError } from '../../../../../core/errors/conflict';
 import { HashGenerator } from '../../../../../ports/hash-manager/hash-manager';
+import { User } from '../../../core/entities/user.model';
 
-class RegisterUserCase implements IRegisterUser {
+class RegisterUserCase implements RegisterUser {
     constructor(
         private readonly emailValidator: EmailValidator,
         private readonly findUser: FindUserByEmail,
@@ -22,7 +23,7 @@ class RegisterUserCase implements IRegisterUser {
         private readonly hashGenerator: HashGenerator
     ) {}
 
-    async execute(input: AddUserInput | undefined): Promise<void> {
+    async execute(input: AddUserInput | undefined): Promise<User> {
         if (!input) {
             throw new RequiredError('input');
         }
@@ -53,7 +54,13 @@ class RegisterUserCase implements IRegisterUser {
             password: await this.hashGenerator(input.password),
         };
 
-        await this.persistUser(userToPersist);
+        const userId = await this.persistUser(userToPersist);
+
+        return {
+            ...input,
+            email,
+            id: userId,
+        };
     }
 }
 

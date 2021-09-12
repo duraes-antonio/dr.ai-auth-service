@@ -14,6 +14,7 @@ import {
 import { when } from 'jest-when';
 import { EmailAddress } from '../../../../../core/value-objects/emai/email';
 import { HashGenerator } from '../../../../../ports/hash-manager/hash-manager';
+import { User } from '../../../core/entities/user.model';
 
 const defaultInput: AddUserInput = {
     name: 'Maria Silva',
@@ -21,7 +22,8 @@ const defaultInput: AddUserInput = {
     email: 'maria@email.com',
 };
 const emptyString = [' \t \n', '', null, undefined];
-const passwordHashed = 'password_hashed';
+const passwordHashedMock = 'password_hashed';
+const userIdMock = 'id';
 
 const emailValidatorFailMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 emailValidatorFailMock.mockImplementation(() => [new InvalidEmail()]);
@@ -32,17 +34,17 @@ const findUserMock = jest.fn() as jest.MockedFunction<FindUserByEmail>;
 when(findUserMock)
     .calledWith(defaultInput.email)
     .mockResolvedValue({
-        id: 'id',
+        id: userIdMock,
         email: new EmailAddress(emailValidatorMock, defaultInput.email),
         imageUrl: 'https://test.jpeg',
         name: defaultInput.name,
     });
 
 const persistUserMock = jest.fn() as jest.MockedFunction<PersistUser>;
-persistUserMock.mockResolvedValue();
+persistUserMock.mockResolvedValue(userIdMock);
 
 const hashGeneratorMock = jest.fn() as jest.MockedFunction<HashGenerator>;
-hashGeneratorMock.mockResolvedValue(passwordHashed);
+hashGeneratorMock.mockResolvedValue(passwordHashedMock);
 
 const useCaseInstanceMailFail = new RegisterUserCase(
     emailValidatorFailMock,
@@ -104,6 +106,17 @@ it('should generate a user data with hashed password', async () => {
     expect(persistUserMock).toHaveBeenCalledTimes(1);
     expect(persistUserMock).toHaveBeenCalledWith({
         ...newUser,
-        password: passwordHashed,
+        password: passwordHashedMock,
     });
+});
+
+it('should return a user data with user id', async () => {
+    const userInput = { ...defaultInput, email: 'another@p.com' };
+    const expectedUser = {
+        ...defaultInput,
+        id: userIdMock,
+        email: new EmailAddress(emailValidatorMock, 'another@p.com'),
+    };
+    const userSaved = await useCaseInstance.execute(userInput);
+    expect(userSaved).toEqual<User>(expectedUser);
 });

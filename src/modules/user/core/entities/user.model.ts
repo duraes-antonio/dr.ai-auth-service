@@ -3,7 +3,7 @@ import { NamedEntity } from '../../../../core/entities/entity';
 
 interface User extends NamedEntity {
     email: EmailAddress;
-    imageUrl: string;
+    imageUrl?: string;
 }
 
 export { User };

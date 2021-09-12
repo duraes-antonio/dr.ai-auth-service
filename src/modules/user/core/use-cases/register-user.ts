@@ -1,20 +1,19 @@
 import { UseCase } from '../../../../core/contracts/use-cases/use-case';
+import { User } from '../entities/user.model';
 
-type AddUserInput = {
+export type AddUserInput = {
     name: string;
     email: string;
     password: string;
     image?: File;
 };
 
-type AddUserOutput = {
+export type AddUserOutput = {
     token: string;
 };
 
-type RegisterUser = UseCase<AddUserInput, void>;
+export type RegisterUserType = UseCase<AddUserInput, User>;
 
-export interface IRegisterUser {
-    execute: RegisterUser;
+export interface RegisterUser {
+    execute: RegisterUserType;
 }
-
-export { AddUserInput, AddUserOutput, RegisterUser };
