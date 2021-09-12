@@ -5,7 +5,7 @@ import {
 import { RequiredError } from '../../../../../core/errors/required';
 import { EmailValidator } from '../../../../../core/contracts/validation/validators/email.validator';
 import { EmailAddress } from '../../../../../core/value-objects/emai/email';
-import { InvalidFormat } from '../../../../../core/errors/invalid-format';
+import { InvalidFormatError } from '../../../../../core/errors/invalid-format';
 import { nameof } from '../../../../../shared/utils/functions';
 import {
     FindUserByEmail,
@@ -39,7 +39,7 @@ class RegisterUserCase implements IRegisterUser {
         const emailErrors = email.validate(input.email);
 
         if (emailErrors?.length) {
-            throw new InvalidFormat(nameof<AddUserInput>('email'));
+            throw new InvalidFormatError(nameof<AddUserInput>('email'));
         }
 
         const user = this.findUser(email.value);

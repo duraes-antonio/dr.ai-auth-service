@@ -3,7 +3,7 @@ import { RequiredError } from '../../../../../core/errors/required';
 import { AddUserInput } from '../../../core/use-cases/register-user';
 import {
     InvalidEmail,
-    InvalidFormat,
+    InvalidFormatError,
 } from '../../../../../core/errors/invalid-format';
 import { EmailValidator } from '../../../../../core/contracts/validation/validators/email.validator';
 import { ConflictError } from '../../../../../core/errors/conflict';
@@ -73,7 +73,7 @@ it('should throw an error if user email is not received', async () => {
 });
 
 it('should throw an error if user email is invalid', async () => {
-    const errorExpected = new InvalidFormat('email');
+    const errorExpected = new InvalidFormatError('email');
     const input: AddUserInput = { ...defaultInput, email: 'test' };
     await expect(useCaseInstanceMailFail.execute(input)).rejects.toThrow(
         errorExpected

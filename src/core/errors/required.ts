@@ -1,12 +1,17 @@
-import {factoryMessageError} from './error-message.factory';
+import { factoryMessageError } from './error-message.factory';
+import { DefaultError } from './default';
+import { StatusCodes } from 'http-status-codes';
 
 export type FactoryMessageRequired = (attributeName: string) => string;
 
-export class RequiredError extends Error {
-	constructor(
-		attributeName: string,
-		factoryMessage: FactoryMessageRequired = factoryMessageError.required
-	) {
-		super(factoryMessage(attributeName));
-	}
+export class RequiredError extends DefaultError {
+    constructor(
+        attributeName: string,
+        factoryMessage: FactoryMessageRequired = factoryMessageError.required
+    ) {
+        super({
+            message: factoryMessage(attributeName),
+            code: StatusCodes.BAD_REQUEST,
+        });
+    }
 }
