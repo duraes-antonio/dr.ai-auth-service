@@ -14,6 +14,7 @@ import {
 import { when } from 'jest-when';
 import { EmailAddress } from '../../../../value-objects/emai/email';
 import { HashGenerator } from '../../../../../main/ports/hash-manager/hash-manager';
+import { emptyString } from '../../../../../__mocks__/values/string';
 
 const inputExistentUser: AddUserInput = {
     name: 'Maria Silva',
@@ -26,7 +27,6 @@ const inputNewtUser: AddUserInput = {
     email: 'new @email.com',
 };
 
-const emptyString = [' \t \n', '', null, undefined];
 const passwordHashedMock = 'password_hashed';
 const userIdMock = 'id';
 

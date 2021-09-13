@@ -1,5 +1,9 @@
-function required(fieldName: string): string {
+function requiredField(fieldName: string): string {
     return `The '${fieldName}' field is required.`;
+}
+
+function requiredParam(fieldName: string): string {
+    return `${fieldName} is required.`;
 }
 
 function maxLength(fieldName: string, maxLimit: number): string {
@@ -23,7 +27,8 @@ function notFound(entityName?: string): string {
 }
 
 export const factoryMessageError = {
-    required,
+    requiredField,
+    requiredParam,
     maxLength,
     invalidFormat,
     conflict,

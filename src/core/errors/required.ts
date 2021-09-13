@@ -7,7 +7,7 @@ export type FactoryMessageRequired = (attributeName: string) => string;
 export class RequiredError extends DefaultError {
     constructor(
         attributeName: string,
-        factoryMessage: FactoryMessageRequired = factoryMessageError.required
+        factoryMessage: FactoryMessageRequired = factoryMessageError.requiredField
     ) {
         super({
             message: factoryMessage(attributeName),
