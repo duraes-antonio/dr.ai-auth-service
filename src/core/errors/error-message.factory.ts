@@ -17,9 +17,15 @@ function conflict(entityName: string, attributeName: string): string {
     return `There is already a ${entityName} with this ${attributeName}.`;
 }
 
+function notFound(entityName?: string): string {
+    const entity = entityName ?? 'item';
+    return `Unable to find the ${entity} with the received data. Please check the data and try again.`;
+}
+
 export const factoryMessageError = {
     required,
     maxLength,
     invalidFormat,
     conflict,
+    notFound,
 };

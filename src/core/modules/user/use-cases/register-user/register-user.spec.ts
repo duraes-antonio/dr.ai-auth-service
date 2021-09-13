@@ -1,26 +1,31 @@
 import { RegisterUserCase } from './register-user';
-import { RequiredError } from '../../../../../core/errors/required';
-import { AddUserInput } from '../../../core/use-cases/register-user';
+import { RequiredError } from '../../../../errors/required';
+import { AddUserInput, UserLogged } from '../../core/use-cases/register-user';
 import {
     InvalidEmail,
     InvalidFormatError,
-} from '../../../../../core/errors/invalid-format';
-import { EmailValidator } from '../../../../../core/contracts/validation/validators/email.validator';
-import { ConflictError } from '../../../../../core/errors/conflict';
+} from '../../../../errors/invalid-format';
+import { EmailValidator } from '../../../../contracts/validation/validators/email.validator';
+import { ConflictError } from '../../../../errors/conflict';
 import {
     FindUserByEmail,
     PersistUser,
-} from '../../../core/repositories/user.repository';
+} from '../../core/repositories/user.repository';
 import { when } from 'jest-when';
-import { EmailAddress } from '../../../../../core/value-objects/emai/email';
-import { HashGenerator } from '../../../../../ports/hash-manager/hash-manager';
-import { User } from '../../../core/entities/user.model';
+import { EmailAddress } from '../../../../value-objects/emai/email';
+import { HashGenerator } from '../../../../../main/ports/hash-manager/hash-manager';
 
-const defaultInput: AddUserInput = {
+const inputExistentUser: AddUserInput = {
     name: 'Maria Silva',
     password: 'password@123',
     email: 'maria@email.com',
 };
+
+const inputNewtUser: AddUserInput = {
+    ...inputExistentUser,
+    email: 'new @email.com',
+};
+
 const emptyString = [' \t \n', '', null, undefined];
 const passwordHashedMock = 'password_hashed';
 const userIdMock = 'id';
@@ -32,12 +37,13 @@ const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 
 const findUserMock = jest.fn() as jest.MockedFunction<FindUserByEmail>;
 when(findUserMock)
-    .calledWith(defaultInput.email)
+    .calledWith(inputExistentUser.email)
     .mockResolvedValue({
         id: userIdMock,
-        email: new EmailAddress(emailValidatorMock, defaultInput.email),
+        email: new EmailAddress(emailValidatorMock, inputExistentUser.email),
         imageUrl: 'https://test.jpeg',
-        name: defaultInput.name,
+        name: inputExistentUser.name,
+        password: inputExistentUser.password,
     });
 
 const persistUserMock = jest.fn() as jest.MockedFunction<PersistUser>;
@@ -68,7 +74,7 @@ it('should throw an error if input is not received', async () => {
 
 it('should throw an error if user email is not received', async () => {
     const errorExpected = new RequiredError('email');
-    const input: AddUserInput = { ...defaultInput, email: undefined };
+    const input: AddUserInput = { ...inputExistentUser, email: undefined };
     await expect(useCaseInstanceMailFail.execute(input)).rejects.toThrow(
         errorExpected
     );
@@ -76,7 +82,7 @@ it('should throw an error if user email is not received', async () => {
 
 it('should throw an error if user email is invalid', async () => {
     const errorExpected = new InvalidFormatError('email');
-    const input: AddUserInput = { ...defaultInput, email: 'test' };
+    const input: AddUserInput = { ...inputExistentUser, email: 'test' };
     await expect(useCaseInstanceMailFail.execute(input)).rejects.toThrow(
         errorExpected
     );
@@ -86,7 +92,7 @@ it.each(emptyString)(
     'should throw an error if password is not provided: %s',
     async (password) => {
         const errorExpected = new RequiredError('password');
-        const input: AddUserInput = { ...defaultInput, password };
+        const input: AddUserInput = { ...inputExistentUser, password };
         await expect(useCaseInstance.execute(input)).rejects.toThrow(
             errorExpected
         );
@@ -95,28 +101,22 @@ it.each(emptyString)(
 
 it('should throw an error if user email already exists', async () => {
     const errorExpected = new ConflictError('user', 'email');
-    await expect(useCaseInstance.execute(defaultInput)).rejects.toThrow(
+    await expect(useCaseInstance.execute(inputExistentUser)).rejects.toThrow(
         errorExpected
     );
 });
 
 it('should generate a user data with hashed password', async () => {
-    const newUser = { ...defaultInput, email: 'another@p.com' };
-    await useCaseInstance.execute(newUser);
+    await useCaseInstance.execute(inputNewtUser);
     expect(persistUserMock).toHaveBeenCalledTimes(1);
     expect(persistUserMock).toHaveBeenCalledWith({
-        ...newUser,
+        ...inputNewtUser,
         password: passwordHashedMock,
     });
 });
 
 it('should return a user data with user id', async () => {
-    const userInput = { ...defaultInput, email: 'another@p.com' };
-    const expectedUser = {
-        ...defaultInput,
-        id: userIdMock,
-        email: new EmailAddress(emailValidatorMock, 'another@p.com'),
-    };
-    const userSaved = await useCaseInstance.execute(userInput);
-    expect(userSaved).toEqual<User>(expectedUser);
+    const expectedUser: UserLogged = { ...inputNewtUser, id: userIdMock };
+    const userSaved = await useCaseInstance.execute(inputNewtUser);
+    expect(userSaved).toEqual(expectedUser);
 });

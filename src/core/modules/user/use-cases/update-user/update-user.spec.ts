@@ -2,9 +2,9 @@ import { UpdateUserCase } from './update-user';
 import {
     UpdateUser,
     UserForUpdate,
-} from '../../../core/repositories/user.repository';
-import { UpdateUserInput } from '../../../core/use-cases/update-user';
-import { FileStorage } from '../../../../../ports/file-storage/file-storage';
+} from '../../core/repositories/user.repository';
+import { UpdateUserInput } from '../../core/use-cases/update-user';
+import { FileStorage } from '../../../../../main/ports/file-storage/file-storage';
 
 const FileMock = jest.fn() as jest.MockedClass<typeof File>;
 const image = new FileMock([], 'mock.jpeg');

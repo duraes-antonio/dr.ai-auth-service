@@ -1,19 +1,19 @@
 import {
     AddUserInput,
     IRegisterUserCase,
-} from '../../../core/use-cases/register-user';
-import { RequiredError } from '../../../../../core/errors/required';
-import { EmailValidator } from '../../../../../core/contracts/validation/validators/email.validator';
-import { EmailAddress } from '../../../../../core/value-objects/emai/email';
-import { InvalidFormatError } from '../../../../../core/errors/invalid-format';
+    UserLogged,
+} from '../../core/use-cases/register-user';
+import { RequiredError } from '../../../../errors/required';
+import { EmailValidator } from '../../../../contracts/validation/validators/email.validator';
+import { EmailAddress } from '../../../../value-objects/emai/email';
+import { InvalidFormatError } from '../../../../errors/invalid-format';
 import { nameof } from '../../../../../shared/utils/functions';
 import {
     FindUserByEmail,
     PersistUser,
-} from '../../../core/repositories/user.repository';
-import { ConflictError } from '../../../../../core/errors/conflict';
-import { HashGenerator } from '../../../../../ports/hash-manager/hash-manager';
-import { User } from '../../../core/entities/user.model';
+} from '../../core/repositories/user.repository';
+import { ConflictError } from '../../../../errors/conflict';
+import { HashGenerator } from '../../../../../main/ports/hash-manager/hash-manager';
 
 class RegisterUserCase implements IRegisterUserCase {
     constructor(
@@ -23,7 +23,7 @@ class RegisterUserCase implements IRegisterUserCase {
         private readonly hashGenerator: HashGenerator
     ) {}
 
-    async execute(input: AddUserInput | undefined): Promise<User> {
+    async execute(input: AddUserInput | undefined): Promise<UserLogged> {
         if (!input) {
             throw new RequiredError('input');
         }
@@ -56,11 +56,7 @@ class RegisterUserCase implements IRegisterUserCase {
 
         const userId = await this.persistUser(userToPersist);
 
-        return {
-            ...input,
-            email,
-            id: userId,
-        };
+        return { ...input, id: userId };
     }
 }
 

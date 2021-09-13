@@ -1,9 +1,9 @@
-import { UpdateUser } from '../../../core/repositories/user.repository';
+import { UpdateUser } from '../../core/repositories/user.repository';
 import {
     IUpdateUserCase as IUpdateUserCase,
     UpdateUserInput,
-} from '../../../core/use-cases/update-user';
-import { FileStorage } from '../../../../../ports/file-storage/file-storage';
+} from '../../core/use-cases/update-user';
+import { FileStorage } from '../../../../../main/ports/file-storage/file-storage';
 
 class UpdateUserCase implements IUpdateUserCase {
     constructor(

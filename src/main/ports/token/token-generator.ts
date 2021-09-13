@@ -11,3 +11,7 @@ export type TokenGeneratorInput<T = unknown> = {
 export type TokenGenerator = <T = unknown>(
     input: TokenGeneratorInput<T>
 ) => Promise<string>;
+
+export type TokenGeneratorWrapper = <T = unknown>(
+    input: Pick<TokenGeneratorInput<T>, 'data'>
+) => Promise<string>;
