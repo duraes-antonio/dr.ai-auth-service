@@ -19,7 +19,7 @@ export class LoginCredentialsCase implements ILoginCredentialsCase {
         const userByEmail = await this.findUserByEmail(input.username);
 
         if (!userByEmail) {
-            throw new NotFoundError('user');
+            this.throwNotFound();
         }
 
         const { password, ...user } = userByEmail;
@@ -30,10 +30,14 @@ export class LoginCredentialsCase implements ILoginCredentialsCase {
         );
 
         if (!passwordMatch) {
-            throw new NotFoundError('user');
+            this.throwNotFound();
         }
 
         const tokenData: UserLogged = { ...user, email: input.username };
         return this.tokenGenerator({ data: tokenData });
+    }
+
+    throwNotFound(): void {
+        throw new NotFoundError('user');
     }
 }
