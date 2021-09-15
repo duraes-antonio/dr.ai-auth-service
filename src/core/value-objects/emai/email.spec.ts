@@ -7,15 +7,17 @@ import { factoryMessageError } from '../../errors/error-message.factory';
 import { FormatError } from '../../contracts/validation/validation';
 
 const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
-emailValidatorMock.mockImplementation(({ maxLength, value }) => {
-    if (value.length > maxLength) {
-        return [
-            {
-                message: factoryMessageError.maxLength('email', maxLength),
-            },
-        ];
+emailValidatorMock.mockImplementation(
+    ({ maxLength, value }: EmailValidatorInput) => {
+        if (maxLength && value.length > maxLength) {
+            return [
+                {
+                    message: factoryMessageError.maxLength('email', maxLength),
+                },
+            ];
+        }
     }
-});
+);
 
 describe('Email Model', function () {
     it('should call validator when initialize', function () {
@@ -35,7 +37,7 @@ describe('Email Model', function () {
 
     it('should return errors when call validate() with incorrect values', function () {
         // arrange
-        const expectedInput: EmailValidatorInput = {
+        const expectedInput: Required<EmailValidatorInput> = {
             value: 'a@a.c',
             maxLength: 2,
         };

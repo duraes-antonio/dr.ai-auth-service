@@ -7,6 +7,7 @@ import { FindUserByEmail } from '../../../user/core/repositories/user.repository
 import { UserLogged } from '../../../user/core/use-cases/register-user';
 import { HashComparator } from '../../../../../main/ports/hash-manager/hash-manager';
 import { NotFoundError } from '../../../../errors/not-found';
+import { RequiredError } from '../../../../errors/required';
 
 export class LoginCredentialsCase implements ILoginCredentialsCase {
     constructor(
@@ -15,7 +16,11 @@ export class LoginCredentialsCase implements ILoginCredentialsCase {
         private readonly hashComparator: HashComparator
     ) {}
 
-    async execute(input?: LoginCredentialsInput): Promise<string> {
+    async execute(input: LoginCredentialsInput): Promise<string> {
+        if (!input) {
+            throw new RequiredError('credentials');
+        }
+
         const userByEmail = await this.findUserByEmail(input.username);
 
         if (!userByEmail) {
@@ -37,7 +42,7 @@ export class LoginCredentialsCase implements ILoginCredentialsCase {
         return this.tokenGenerator({ data: tokenData });
     }
 
-    throwNotFound(): void {
+    throwNotFound(): never {
         throw new NotFoundError('user');
     }
 }

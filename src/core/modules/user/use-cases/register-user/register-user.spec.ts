@@ -67,6 +67,7 @@ const useCaseInstance = new RegisterUserCase(
 );
 
 it('should throw an error if input is not received', async () => {
+    // @ts-ignore
     await expect(useCaseInstance.execute(undefined)).rejects.toThrow(
         new RequiredError('input')
     );
@@ -74,6 +75,7 @@ it('should throw an error if input is not received', async () => {
 
 it('should throw an error if user email is not received', async () => {
     const errorExpected = new RequiredError('email');
+    // @ts-ignore
     const input: AddUserInput = { ...inputExistentUser, email: undefined };
     await expect(useCaseInstanceMailFail.execute(input)).rejects.toThrow(
         errorExpected
@@ -92,6 +94,7 @@ it.each(emptyString)(
     'should throw an error if password is not provided: %s',
     async (password) => {
         const errorExpected = new RequiredError('password');
+        // @ts-ignore
         const input: AddUserInput = { ...inputExistentUser, password };
         await expect(useCaseInstance.execute(input)).rejects.toThrow(
             errorExpected

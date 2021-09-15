@@ -23,7 +23,7 @@ class RegisterUserCase implements IRegisterUserCase {
         private readonly hashGenerator: HashGenerator
     ) {}
 
-    async execute(input: AddUserInput | undefined): Promise<UserLogged> {
+    async execute(input: AddUserInput): Promise<UserLogged> {
         if (!input) {
             throw new RequiredError('input');
         }
@@ -43,7 +43,7 @@ class RegisterUserCase implements IRegisterUserCase {
             throw new InvalidFormatError(nameof<AddUserInput>('email'));
         }
 
-        const user = this.findUser(email.value);
+        const user = await this.findUser(email.value);
 
         if (user) {
             throw new ConflictError('user', nameof<AddUserInput>('email'));

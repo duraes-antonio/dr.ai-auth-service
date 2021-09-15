@@ -34,6 +34,7 @@ it.each(emptyString)(
         );
 
         // act & assert
+        // @ts-ignore
         await expect(useCase.execute(inputToken)).rejects.toThrow(
             expectedError
         );

@@ -17,7 +17,7 @@ class UpdateUserCase implements IUpdateUserCase {
         }
 
         const { name, image } = input;
-        let imageUrl: string;
+        let imageUrl: string | undefined;
 
         if (image) {
             imageUrl = await this.fileStorage.save(image);

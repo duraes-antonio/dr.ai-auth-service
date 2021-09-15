@@ -7,6 +7,7 @@ import {
 } from '../../../../../__mocks__/repositories/find-user';
 import { NotFoundError } from '../../../../errors/not-found';
 import { HashComparator } from '../../../../../main/ports/hash-manager/hash-manager';
+import { RequiredError } from '../../../../errors/required';
 
 const mockedToken = 'token';
 
@@ -40,18 +41,33 @@ const loginDataInexistentEmail: LoginCredentialsInput = {
     username: 'invalid@email.com',
 };
 
-it.each([loginDataInexistentEmail, loginDataInvalidPass])(
-    `should throw error if password provided doesn't match with stored`,
-    async (data: LoginCredentialsInput) => {
-        // arrange
-        const expectedError = new NotFoundError('user');
+const nullableValues = [undefined, null];
 
-        // act & assert
-        await expect(useCase.execute(data)).rejects.toThrow(expectedError);
+it.each(nullableValues)(
+    'should throw if credentials is not provided',
+    async (invalidValue) => {
+        const expectedError = new RequiredError('credentials');
+        // @ts-ignore
+        await expect(useCase.execute(invalidValue)).rejects.toThrow(
+            expectedError
+        );
     }
 );
 
+it(`should throw error if password provided doesn't match with stored`, async () => {
+    const expectedError = new NotFoundError('user');
+    await expect(useCase.execute(loginDataInvalidPass)).rejects.toThrow(
+        expectedError
+    );
+});
+
+it(`should throw error if not exists an user with username received`, async () => {
+    const expectedError = new NotFoundError('user');
+    await expect(useCase.execute(loginDataInexistentEmail)).rejects.toThrow(
+        expectedError
+    );
+});
+
 it('should check credentials and return an token', async () => {
-    // act & assert
     await expect(useCase.execute(loginDataOk)).resolves.toBe(mockedToken);
 });

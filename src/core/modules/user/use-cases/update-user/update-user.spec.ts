@@ -25,28 +25,23 @@ const factoryDependencies = () => {
 };
 
 it('should ignore empty input and return success', async () => {
-    // Arrange
     const { useCase, fileStorage, updateUserRepository } =
         factoryDependencies();
 
-    // Act
+    // @ts-ignore
     await useCase.execute(undefined);
 
-    // Assert
     expect(fileStorage.save).not.toHaveBeenCalled();
     expect(updateUserRepository).not.toHaveBeenCalled();
 });
 
 it('should call dependencies with name and image file', async () => {
-    // Arrange
     const { useCase, fileStorage, updateUserRepository } =
         factoryDependencies();
     const inputExpected = { name: useCaseInput.name, imageUrl };
 
-    // Act
     await useCase.execute(useCaseInput);
 
-    // Assert
     expect(fileStorage.save).toHaveBeenCalledTimes(1);
     expect(fileStorage.save).toHaveBeenCalledWith(image);
     expect(updateUserRepository).toHaveBeenCalledTimes(1);
@@ -54,16 +49,13 @@ it('should call dependencies with name and image file', async () => {
 });
 
 it(`should call repository with user name, but not call file storage`, async () => {
-    // Arrange
     const { useCase, fileStorage, updateUserRepository } =
         factoryDependencies();
     const input = { ...useCaseInput, image: undefined };
     const updateInputExpected: UserForUpdate = { name: input.name };
 
-    // Act
     await useCase.execute(input);
 
-    // Assert
     expect(fileStorage.save).not.toHaveBeenCalled();
     expect(updateUserRepository).toHaveBeenCalledTimes(1);
     expect(updateUserRepository).toHaveBeenCalledWith(updateInputExpected);

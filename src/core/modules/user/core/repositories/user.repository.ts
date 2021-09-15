@@ -6,7 +6,7 @@ export type UserForUpdate = {
     name?: string;
 };
 
-export type FindUserByEmail = (email: string) => Promise<User> | undefined;
+export type FindUserByEmail = (email: string) => Promise<User | undefined>;
 
 export type PersistUser = (user: AddUserInput) => Promise<string>;
 

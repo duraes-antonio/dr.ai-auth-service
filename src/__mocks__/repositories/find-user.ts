@@ -9,7 +9,7 @@ export const userEmailMock = 'email@email.com';
 
 findByEmailMock.mockImplementation((email) => {
     if (email !== userEmailMock) {
-        return undefined;
+        return Promise.resolve(undefined);
     }
     return Promise.resolve({
         email: new EmailAddress(emailValidatorMock, userEmailMock),
