@@ -1,5 +1,5 @@
 import { factoryMessageError } from './error-message.factory';
-import { FormatError } from '../contracts/validation/validation';
+import { FormatError } from '../ports/validation/validation';
 import { DefaultError } from './default';
 import { StatusCodes } from 'http-status-codes';
 

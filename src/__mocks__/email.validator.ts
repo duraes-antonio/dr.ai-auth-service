@@ -1,4 +1,4 @@
-import { EmailValidator } from '../core/contracts/validation/validators/email.validator';
+import { EmailValidator } from '../core/ports/validation/validators/email.validator';
 import { InvalidEmail } from '../core/errors/invalid-format';
 
 export const emailValidatorFailMock =

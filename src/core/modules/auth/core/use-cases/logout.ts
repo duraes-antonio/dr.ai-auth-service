@@ -1,3 +1,3 @@
-import { IUseCase } from '../../../../contracts/use-cases/use-case';
+import { IUseCase } from '../../../../contracts/use-case';
 
 export interface ILogoutCase extends IUseCase<string, void> {}

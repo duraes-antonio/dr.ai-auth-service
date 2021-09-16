@@ -1,4 +1,4 @@
-import { IUseCase } from '../../../../contracts/use-cases/use-case';
+import { IUseCase } from '../../../../contracts/use-case';
 
 export type LoginCredentialsInput = {
     username: string;

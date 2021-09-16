@@ -1,12 +1,12 @@
 import { LoginCredentialsCase } from './login';
 import { LoginCredentialsInput } from '../../core/use-cases/login';
-import { TokenGeneratorWrapper } from '../../../../../main/ports/token/token-generator';
+import { TokenGeneratorWrapper } from '../../../../ports/token/token-generator';
 import {
     findByEmailMock,
     userEmailMock,
 } from '../../../../../__mocks__/repositories/find-user';
 import { NotFoundError } from '../../../../errors/not-found';
-import { HashComparator } from '../../../../../main/ports/hash-manager/hash-manager';
+import { HashComparator } from '../../../../ports/hash-manager/hash-manager';
 import { RequiredError } from '../../../../errors/required';
 
 const mockedToken = 'token';

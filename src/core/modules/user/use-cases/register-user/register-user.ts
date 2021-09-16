@@ -4,8 +4,8 @@ import {
     UserLogged,
 } from '../../core/use-cases/register-user';
 import { RequiredError } from '../../../../errors/required';
-import { EmailValidator } from '../../../../contracts/validation/validators/email.validator';
-import { EmailAddress } from '../../../../value-objects/emai/email';
+import { EmailValidator } from '../../../../ports/validation/validators/email.validator';
+import { EmailAddress } from '../../../../value-objects/email/email';
 import { InvalidFormatError } from '../../../../errors/invalid-format';
 import { nameof } from '../../../../../shared/utils/functions';
 import {
@@ -13,7 +13,7 @@ import {
     PersistUser,
 } from '../../core/repositories/user.repository';
 import { ConflictError } from '../../../../errors/conflict';
-import { HashGenerator } from '../../../../../main/ports/hash-manager/hash-manager';
+import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
 
 class RegisterUserCase implements IRegisterUserCase {
     constructor(

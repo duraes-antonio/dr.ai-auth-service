@@ -1,4 +1,4 @@
-import { EmailAddress } from '../../../../value-objects/emai/email';
+import { EmailAddress } from '../../../../value-objects/email/email';
 import { NamedEntity } from '../../../../entities/entity';
 
 interface User extends NamedEntity {

@@ -3,7 +3,7 @@ import {
     IUpdateUserCase as IUpdateUserCase,
     UpdateUserInput,
 } from '../../core/use-cases/update-user';
-import { FileStorage } from '../../../../../main/ports/file-storage/file-storage';
+import { FileStorage } from '../../../../ports/file-storage/file-storage';
 
 class UpdateUserCase implements IUpdateUserCase {
     constructor(

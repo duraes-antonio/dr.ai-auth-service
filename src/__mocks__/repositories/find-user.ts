@@ -1,6 +1,6 @@
 import MockedFunction = jest.MockedFunction;
 import { FindUserByEmail } from '../../core/modules/user/core/repositories/user.repository';
-import { EmailAddress } from '../../core/value-objects/emai/email';
+import { EmailAddress } from '../../core/value-objects/email/email';
 import { emailValidatorMock } from '../email.validator';
 
 export const findByEmailMock = jest.fn() as MockedFunction<FindUserByEmail>;

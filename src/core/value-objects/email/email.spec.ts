@@ -2,9 +2,9 @@ import { EmailAddress } from './email';
 import {
     EmailValidator,
     EmailValidatorInput,
-} from '../../contracts/validation/validators/email.validator';
+} from '../../ports/validation/validators/email.validator';
 import { factoryMessageError } from '../../errors/error-message.factory';
-import { FormatError } from '../../contracts/validation/validation';
+import { FormatError } from '../../ports/validation/validation';
 
 const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 emailValidatorMock.mockImplementation(

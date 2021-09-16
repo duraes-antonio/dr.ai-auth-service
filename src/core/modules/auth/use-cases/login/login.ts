@@ -2,10 +2,10 @@ import {
     ILoginCredentialsCase,
     LoginCredentialsInput,
 } from '../../core/use-cases/login';
-import { TokenGeneratorWrapper } from '../../../../../main/ports/token/token-generator';
+import { TokenGeneratorWrapper } from '../../../../ports/token/token-generator';
 import { FindUserByEmail } from '../../../user/core/repositories/user.repository';
 import { UserLogged } from '../../../user/core/use-cases/register-user';
-import { HashComparator } from '../../../../../main/ports/hash-manager/hash-manager';
+import { HashComparator } from '../../../../ports/hash-manager/hash-manager';
 import { NotFoundError } from '../../../../errors/not-found';
 import { RequiredError } from '../../../../errors/required';
 

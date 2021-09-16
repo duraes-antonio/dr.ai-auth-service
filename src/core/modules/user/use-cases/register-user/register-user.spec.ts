@@ -5,15 +5,15 @@ import {
     InvalidEmail,
     InvalidFormatError,
 } from '../../../../errors/invalid-format';
-import { EmailValidator } from '../../../../contracts/validation/validators/email.validator';
+import { EmailValidator } from '../../../../ports/validation/validators/email.validator';
 import { ConflictError } from '../../../../errors/conflict';
 import {
     FindUserByEmail,
     PersistUser,
 } from '../../core/repositories/user.repository';
 import { when } from 'jest-when';
-import { EmailAddress } from '../../../../value-objects/emai/email';
-import { HashGenerator } from '../../../../../main/ports/hash-manager/hash-manager';
+import { EmailAddress } from '../../../../value-objects/email/email';
+import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
 import { emptyString } from '../../../../../__mocks__/values/string';
 
 const inputExistentUser: AddUserInput = {

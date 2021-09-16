@@ -1,4 +1,4 @@
-import { UseCase } from '../../../../contracts/use-cases/use-case';
+import { UseCase } from '../../../../contracts/use-case';
 import { User } from '../entities/user.model';
 
 export type AddUserInput = {

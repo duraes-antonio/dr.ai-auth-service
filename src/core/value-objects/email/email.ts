@@ -1,8 +1,5 @@
-import {
-    FormatError,
-    Validatable,
-} from '../../contracts/validation/validation';
-import { EmailValidator } from '../../contracts/validation/validators/email.validator';
+import { FormatError, Validatable } from '../../ports/validation/validation';
+import { EmailValidator } from '../../ports/validation/validators/email.validator';
 
 class EmailAddress implements Validatable<string> {
     readonly valid: boolean;

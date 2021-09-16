@@ -2,7 +2,7 @@ import {
     AddUserInput,
     IRegisterUserCase,
 } from '../../../core/modules/user/core/use-cases/register-user';
-import { TokenGeneratorWrapper } from '../../ports/token/token-generator';
+import { TokenGeneratorWrapper } from '../../../core/ports/token/token-generator';
 import {
     IUpdateUserCase,
     UpdateUserInput,
