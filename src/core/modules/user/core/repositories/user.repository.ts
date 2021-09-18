@@ -14,7 +14,7 @@ export type PersistUser = (user: AddUserInput) => Promise<number>;
 export type UpdateUser = (user: UserForUpdate) => Promise<void>;
 
 export interface IFindUserByEmail {
-    find(email: string): Promise<User | undefined>;
+    findByEmail(email: string): Promise<User | undefined>;
 }
 
 export interface IPersistUser {
@@ -24,3 +24,8 @@ export interface IPersistUser {
 export interface IUpdateUser {
     update(user: UserForUpdate): Promise<void>;
 }
+
+export interface IUserRepository
+    extends IFindUserByEmail,
+        IPersistUser,
+        IUpdateUser {}
