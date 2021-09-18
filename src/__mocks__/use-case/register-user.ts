@@ -1,6 +1,6 @@
 import { RegisterUserCase } from '../../core/modules/user/use-cases/register-user/register-user';
 
-export const userIdMock = 'id';
+export const userIdMock = 1;
 
 const execute = jest.fn() as jest.MockedFunction<
     typeof RegisterUserCase.prototype.execute

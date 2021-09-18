@@ -8,18 +8,21 @@ import {
 import { EmailValidator } from '../../../../ports/validation/validators/email.validator';
 import { ConflictError } from '../../../../errors/conflict';
 import {
-    FindUserByEmail,
-    PersistUser,
+    IFindUserByEmail,
+    IPersistUser,
 } from '../../core/repositories/user.repository';
-import { when } from 'jest-when';
-import { EmailAddress } from '../../../../value-objects/email/email';
 import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
 import { emptyString } from '../../../../../__mocks__/values/string';
+import { mock } from 'jest-mock-extended';
+
+import { existentUserMock } from '../../../../../__mocks__/repositories/user-repository.mock';
+import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
+import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
 
 const inputExistentUser: AddUserInput = {
-    name: 'Maria Silva',
-    password: 'password@123',
-    email: 'maria@email.com',
+    name: existentUserMock.name,
+    password: existentUserMock.password,
+    email: existentUserMock.email.value,
 };
 
 const inputNewtUser: AddUserInput = {
@@ -28,29 +31,19 @@ const inputNewtUser: AddUserInput = {
 };
 
 const passwordHashedMock = 'password_hashed';
-const userIdMock = 'id';
+const userIdMock = 1;
+const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
+const containerDI = getContainerDI();
+const findUserMock = containerDI.get<IFindUserByEmail>(TYPES.IFindUserByEmail);
 
 const emailValidatorFailMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 emailValidatorFailMock.mockImplementation(() => [new InvalidEmail()]);
 
-const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
-
-const findUserMock = jest.fn() as jest.MockedFunction<FindUserByEmail>;
-when(findUserMock)
-    .calledWith(inputExistentUser.email)
-    .mockResolvedValue({
-        id: userIdMock,
-        email: new EmailAddress(emailValidatorMock, inputExistentUser.email),
-        imageUrl: 'https://test.jpeg',
-        name: inputExistentUser.name,
-        password: inputExistentUser.password,
-    });
-
-const persistUserMock = jest.fn() as jest.MockedFunction<PersistUser>;
-persistUserMock.mockResolvedValue(userIdMock);
-
 const hashGeneratorMock = jest.fn() as jest.MockedFunction<HashGenerator>;
 hashGeneratorMock.mockResolvedValue(passwordHashedMock);
+
+const persistUserMock = mock<IPersistUser>();
+persistUserMock.persist.mockResolvedValue(userIdMock);
 
 const useCaseInstanceMailFail = new RegisterUserCase(
     emailValidatorFailMock,
@@ -111,8 +104,8 @@ it('should throw an error if user email already exists', async () => {
 
 it('should generate a user data with hashed password', async () => {
     await useCaseInstance.execute(inputNewtUser);
-    expect(persistUserMock).toHaveBeenCalledTimes(1);
-    expect(persistUserMock).toHaveBeenCalledWith({
+    expect(persistUserMock.persist).toHaveBeenCalledTimes(1);
+    expect(persistUserMock.persist).toHaveBeenCalledWith({
         ...inputNewtUser,
         password: passwordHashedMock,
     });

@@ -9,8 +9,8 @@ import { EmailAddress } from '../../../../value-objects/email/email';
 import { InvalidFormatError } from '../../../../errors/invalid-format';
 import { nameof } from '../../../../../shared/utils/functions';
 import {
-    FindUserByEmail,
-    PersistUser,
+    IFindUserByEmail,
+    IPersistUser,
 } from '../../core/repositories/user.repository';
 import { ConflictError } from '../../../../errors/conflict';
 import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
@@ -18,8 +18,8 @@ import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
 class RegisterUserCase implements IRegisterUserCase {
     constructor(
         private readonly emailValidator: EmailValidator,
-        private readonly findUser: FindUserByEmail,
-        private readonly persistUser: PersistUser,
+        private readonly findUser: IFindUserByEmail,
+        private readonly persistUser: IPersistUser,
         private readonly hashGenerator: HashGenerator
     ) {}
 
@@ -43,7 +43,7 @@ class RegisterUserCase implements IRegisterUserCase {
             throw new InvalidFormatError(nameof<AddUserInput>('email'));
         }
 
-        const user = await this.findUser(email.value);
+        const user = await this.findUser.findByEmail(email.value);
 
         if (user) {
             throw new ConflictError('user', nameof<AddUserInput>('email'));
@@ -54,7 +54,7 @@ class RegisterUserCase implements IRegisterUserCase {
             password: await this.hashGenerator(input.password),
         };
 
-        const userId = await this.persistUser(userToPersist);
+        const userId = await this.persistUser.persist(userToPersist);
 
         return { ...input, id: userId };
     }
