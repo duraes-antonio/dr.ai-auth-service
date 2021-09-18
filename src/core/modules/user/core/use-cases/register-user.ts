@@ -5,7 +5,6 @@ export type AddUserInput = {
     name: string;
     email: string;
     password: string;
-    image?: File;
 };
 
 export type UserLogged = Pick<AddUserInput, 'name' | 'email'> &

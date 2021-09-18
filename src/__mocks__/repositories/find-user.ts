@@ -14,7 +14,7 @@ findByEmailMock.mockImplementation((email) => {
     return Promise.resolve({
         email: new EmailAddress(emailValidatorMock, userEmailMock),
         password: 'password',
-        id: 'id',
+        id: 1,
         name: 'User Name',
         imageUrl: 'https://image.jpeg',
     });

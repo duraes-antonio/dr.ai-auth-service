@@ -1,6 +1,7 @@
-import { AddUserInput } from './register-user';
-
-export type UpdateUserInput = Partial<Pick<AddUserInput, 'name' | 'image'>>;
+export type UpdateUserInput = {
+    name: string;
+    image: File;
+};
 
 // export type UpdateUserCase = UseCase<UpdateUserInput, void>;
 

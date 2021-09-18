@@ -1,5 +1,5 @@
 interface Entity {
-    id: string;
+    id: number;
 }
 
 interface NamedEntity extends Entity {
