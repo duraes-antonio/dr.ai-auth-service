@@ -14,7 +14,6 @@ import {
 } from '../../core/repositories/user.repository';
 import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
 import { emptyString } from '../../../../../__mocks__/values/string';
-import { mock } from 'jest-mock-extended';
 
 import { existentUserMock } from '../../../../../__mocks__/repositories/user-repository.mock';
 import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
@@ -36,15 +35,13 @@ const userIdMock = 1;
 const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 const containerDI = getContainerDI();
 const findUserMock = containerDI.get<IFindUserByEmail>(TYPES.IFindUserByEmail);
+const persistUserMock = containerDI.get<IPersistUser>(TYPES.IPersistUser);
 
 const emailValidatorFailMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 emailValidatorFailMock.mockImplementation(() => [new InvalidEmail()]);
 
 const hashGeneratorMock = jest.fn() as jest.MockedFunction<HashGenerator>;
 hashGeneratorMock.mockResolvedValue(passwordHashedMock);
-
-const persistUserMock = mock<IPersistUser>();
-persistUserMock.persist.mockResolvedValue(userIdMock);
 
 const useCaseInstanceMailFail = new RegisterUserCase(
     emailValidatorFailMock,
