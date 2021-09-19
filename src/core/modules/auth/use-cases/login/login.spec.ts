@@ -1,6 +1,5 @@
 import { LoginCredentialsCase } from './login';
 import { LoginCredentialsInput } from '../../core/use-cases/login';
-import { TokenGeneratorWrapper } from '../../../../ports/token/token-generator';
 import { NotFoundError } from '../../../../errors/not-found';
 import { RequiredError } from '../../../../errors/required';
 import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
@@ -10,20 +9,10 @@ import { FindUserByEmail } from '../../../user/core/repositories/user.repository
 import { userEmailMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
 
 const containerDI = getContainerDI();
-const mockedToken = 'token';
 const hashComparator = containerDI.get<HashManager>(TYPES.HashManager);
 const findByEmail = containerDI.get<FindUserByEmail>(TYPES.FindUserByEmail);
 
-const tokenGeneratorMock =
-    jest.fn() as jest.MockedFunction<TokenGeneratorWrapper>;
-
-tokenGeneratorMock.mockResolvedValue(mockedToken);
-
-const useCase = new LoginCredentialsCase(
-    tokenGeneratorMock,
-    findByEmail,
-    hashComparator
-);
+const useCase = new LoginCredentialsCase(findByEmail, hashComparator);
 
 const loginDataOk: LoginCredentialsInput = {
     password: 'password',
@@ -68,5 +57,5 @@ it(`should throw error if not exists an user with username received`, async () =
 });
 
 it('should check credentials and return an token', async () => {
-    await expect(useCase.execute(loginDataOk)).resolves.toBe(mockedToken);
+    await expect(useCase.execute(loginDataOk)).resolves;
 });

@@ -1,8 +1,8 @@
 import {
     AddUserInput,
     IRegisterUserCase,
+    UserLogged,
 } from '../../../core/modules/user/core/use-cases/register-user';
-import { TokenGeneratorWrapper } from '../../../core/ports/token/token-generator';
 import {
     IUpdateUserCase,
     UpdateUserInput,
@@ -11,13 +11,12 @@ import {
 class UserController {
     constructor(
         private readonly registerCase: IRegisterUserCase,
-        private readonly updateCase: IUpdateUserCase,
-        private readonly tokenGenerator: TokenGeneratorWrapper
+        private readonly updateCase: IUpdateUserCase
     ) {}
 
-    async register(userData: AddUserInput): Promise<string> {
+    async register(userData: AddUserInput): Promise<UserLogged> {
         const userRegistered = await this.registerCase.execute(userData);
-        return await this.tokenGenerator({ data: userRegistered });
+        return userRegistered;
     }
 
     async update(input: UpdateUserInput): Promise<void> {

@@ -2,7 +2,6 @@ import {
     ILoginCredentialsCase,
     LoginCredentialsInput,
 } from '../../core/use-cases/login';
-import { TokenGeneratorWrapper } from '../../../../ports/token/token-generator';
 import { UserLogged } from '../../../user/core/use-cases/register-user';
 import { NotFoundError } from '../../../../errors/not-found';
 import { RequiredError } from '../../../../errors/required';
@@ -11,12 +10,11 @@ import { FindUserByEmail } from '../../../user/core/repositories/user.repository
 
 export class LoginCredentialsCase implements ILoginCredentialsCase {
     constructor(
-        private readonly tokenGenerator: TokenGeneratorWrapper,
         private readonly findUserByEmail: FindUserByEmail,
         private readonly hashManager: HashManager
     ) {}
 
-    async execute(input: LoginCredentialsInput): Promise<string> {
+    async execute(input: LoginCredentialsInput): Promise<UserLogged> {
         if (!input) {
             throw new RequiredError('credentials');
         }
@@ -40,8 +38,7 @@ export class LoginCredentialsCase implements ILoginCredentialsCase {
             this.throwNotFound();
         }
 
-        const tokenData: UserLogged = { ...user, email: input.username };
-        return this.tokenGenerator({ data: tokenData });
+        return { ...user, email: input.username };
     }
 
     throwNotFound(): never {
