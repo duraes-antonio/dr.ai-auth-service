@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { RegisterUserCase } from './register-user';
 import { RequiredError } from '../../../../errors/required';
 import { AddUserInput, UserLogged } from '../../core/use-cases/register-user';
