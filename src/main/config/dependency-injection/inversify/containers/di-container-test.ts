@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
 import {
-    IFindUserByEmail,
-    IPersistUser,
-    IUpdateUser,
+    FindUserByEmail,
+    PersistUser,
+    UpdateUser,
 } from '../../../../../core/modules/user/core/repositories/user.repository';
 import { TYPES } from '../di-types';
 import { UserRepositoryMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
@@ -12,9 +12,9 @@ import { HashManagerMock } from '../../../../../__mocks__/adapters/hash-manager/
 
 export const containerDITest = new Container();
 
-containerDITest.bind<IPersistUser>(TYPES.IPersistUser).to(UserRepositoryMock);
+containerDITest.bind<PersistUser>(TYPES.PersistUser).to(UserRepositoryMock);
 containerDITest
-    .bind<IFindUserByEmail>(TYPES.IFindUserByEmail)
+    .bind<FindUserByEmail>(TYPES.FindUserByEmail)
     .to(UserRepositoryMock);
-containerDITest.bind<IUpdateUser>(TYPES.IUpdateUser).to(UserRepositoryMock);
+containerDITest.bind<UpdateUser>(TYPES.UpdateUser).to(UserRepositoryMock);
 containerDITest.bind<HashManager>(TYPES.HashManager).to(HashManagerMock);

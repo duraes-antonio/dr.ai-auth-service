@@ -6,13 +6,13 @@ import { RequiredError } from '../../../../errors/required';
 import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
 import { HashManager } from '../../../../ports/hash-manager/hash-manager';
 import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
-import { IFindUserByEmail } from '../../../user/core/repositories/user.repository';
+import { FindUserByEmail } from '../../../user/core/repositories/user.repository';
 import { userEmailMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
 
 const containerDI = getContainerDI();
 const mockedToken = 'token';
 const hashComparator = containerDI.get<HashManager>(TYPES.HashManager);
-const findByEmail = containerDI.get<IFindUserByEmail>(TYPES.IFindUserByEmail);
+const findByEmail = containerDI.get<FindUserByEmail>(TYPES.FindUserByEmail);
 
 const tokenGeneratorMock =
     jest.fn() as jest.MockedFunction<TokenGeneratorWrapper>;

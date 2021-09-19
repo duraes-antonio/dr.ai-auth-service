@@ -9,8 +9,8 @@ import { EmailAddress } from '../../../../value-objects/email/email';
 import { InvalidFormatError } from '../../../../errors/invalid-format';
 import { nameof } from '../../../../../shared/utils/functions';
 import {
-    IFindUserByEmail,
-    IPersistUser,
+    FindUserByEmail,
+    PersistUser,
 } from '../../core/repositories/user.repository';
 import { ConflictError } from '../../../../errors/conflict';
 import { HashManager } from '../../../../ports/hash-manager/hash-manager';
@@ -18,8 +18,8 @@ import { HashManager } from '../../../../ports/hash-manager/hash-manager';
 class RegisterUserCase implements IRegisterUserCase {
     constructor(
         private readonly emailValidator: EmailValidator,
-        private readonly findUser: IFindUserByEmail,
-        private readonly persistUser: IPersistUser,
+        private readonly findUser: FindUserByEmail,
+        private readonly persistUser: PersistUser,
         private readonly hashManager: HashManager
     ) {}
 

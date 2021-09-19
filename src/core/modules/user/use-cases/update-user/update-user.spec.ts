@@ -5,7 +5,7 @@ import { FileStorage } from '../../../../ports/file-storage/file-storage';
 import { existentUserMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
 import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
 import {
-    IUpdateUser,
+    UpdateUser,
     UserForUpdate,
 } from '../../core/repositories/user.repository';
 import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
@@ -21,9 +21,7 @@ const useCaseInput: UpdateUserInput = {
 };
 
 const factoryDependencies = () => {
-    const updateUserRepository = containerDI.get<IUpdateUser>(
-        TYPES.IUpdateUser
-    );
+    const updateUserRepository = containerDI.get<UpdateUser>(TYPES.UpdateUser);
     const fileStorage: FileStorage = {
         save: jest.fn().mockResolvedValue(imageUrl),
         delete: jest.fn(),

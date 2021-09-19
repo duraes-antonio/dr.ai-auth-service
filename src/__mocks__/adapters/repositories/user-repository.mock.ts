@@ -1,6 +1,6 @@
 import {
-    IUserRepository,
     UserForUpdate,
+    UserRepository,
 } from '../../../core/modules/user/core/repositories/user.repository';
 import { mock } from 'jest-mock-extended';
 import { userIdMock } from '../../use-case/register-user';
@@ -21,8 +21,8 @@ export const existentUserMock = {
 };
 
 @injectable()
-export class UserRepositoryMock implements IUserRepository {
-    readonly userRepositoryMock = mock<IUserRepository>();
+export class UserRepositoryMock implements UserRepository {
+    readonly userRepositoryMock = mock<UserRepository>();
     readonly findByEmailMock = jest.fn();
     readonly persistMock = jest.fn();
     readonly updateMock = jest.fn();

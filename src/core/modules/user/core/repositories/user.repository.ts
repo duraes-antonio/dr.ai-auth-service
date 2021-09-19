@@ -7,19 +7,19 @@ export interface UserForUpdate extends Entity {
     name?: string;
 }
 
-export interface IFindUserByEmail {
+export interface FindUserByEmail {
     findByEmail(email: string): Promise<User | undefined>;
 }
 
-export interface IPersistUser {
+export interface PersistUser {
     persist(user: AddUserInput): Promise<number>;
 }
 
-export interface IUpdateUser {
+export interface UpdateUser {
     update(user: UserForUpdate): Promise<void>;
 }
 
-export interface IUserRepository
-    extends IFindUserByEmail,
-        IPersistUser,
-        IUpdateUser {}
+export interface UserRepository
+    extends FindUserByEmail,
+        PersistUser,
+        UpdateUser {}

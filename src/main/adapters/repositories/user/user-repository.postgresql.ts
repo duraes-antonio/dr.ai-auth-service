@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import {
-    IFindUserByEmail,
-    IPersistUser,
-    IUpdateUser,
+    FindUserByEmail,
+    PersistUser,
+    UpdateUser,
     UserForUpdate,
 } from '../../../../core/modules/user/core/repositories/user.repository';
 import { AddUserInput } from '../../../../core/modules/user/core/use-cases/register-user';
@@ -13,7 +13,7 @@ const { user: userPrismaSchema } = new PrismaClient();
 
 @injectable()
 export class UserRepositoryPostgresql
-    implements IFindUserByEmail, IPersistUser, IUpdateUser
+    implements FindUserByEmail, PersistUser, UpdateUser
 {
     async findByEmail(email: string): Promise<User | undefined> {
         const userDto = (await userPrismaSchema.findUnique({

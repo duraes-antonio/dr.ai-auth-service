@@ -9,8 +9,8 @@ import {
 import { EmailValidator } from '../../../../ports/validation/validators/email.validator';
 import { ConflictError } from '../../../../errors/conflict';
 import {
-    IFindUserByEmail,
-    IPersistUser,
+    FindUserByEmail,
+    PersistUser,
 } from '../../core/repositories/user.repository';
 import { emptyString } from '../../../../../__mocks__/values/string';
 
@@ -34,8 +34,8 @@ const passwordHashedMock = 'password_hashed';
 const userIdMock = 1;
 const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 const containerDI = getContainerDI();
-const findUserMock = containerDI.get<IFindUserByEmail>(TYPES.IFindUserByEmail);
-const persistUserMock = containerDI.get<IPersistUser>(TYPES.IPersistUser);
+const findUserMock = containerDI.get<FindUserByEmail>(TYPES.FindUserByEmail);
+const persistUserMock = containerDI.get<PersistUser>(TYPES.PersistUser);
 const hashManager = containerDI.get<HashManager>(TYPES.HashManager);
 
 const emailValidatorFailMock = jest.fn() as jest.MockedFunction<EmailValidator>;

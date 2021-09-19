@@ -1,6 +1,6 @@
 export const TYPES = {
-    IPersistUser: Symbol.for('IPersistUser'),
-    IFindUserByEmail: Symbol.for('IFindUserByEmail'),
-    IUpdateUser: Symbol.for('IUpdateUser'),
+    PersistUser: Symbol.for('PersistUser'),
+    FindUserByEmail: Symbol.for('FindUserByEmail'),
+    UpdateUser: Symbol.for('UpdateUser'),
     HashManager: Symbol.for('HashManager'),
 };

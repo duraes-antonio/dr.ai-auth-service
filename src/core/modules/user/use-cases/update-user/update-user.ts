@@ -3,11 +3,11 @@ import {
     UpdateUserInput,
 } from '../../core/use-cases/update-user';
 import { FileStorage } from '../../../../ports/file-storage/file-storage';
-import { IUpdateUser } from '../../core/repositories/user.repository';
+import { UpdateUser } from '../../core/repositories/user.repository';
 
 class UpdateUserCase implements IUpdateUserCase {
     constructor(
-        private readonly updateUser: IUpdateUser,
+        private readonly updateUser: UpdateUser,
         private readonly fileStorage: FileStorage
     ) {}
 
