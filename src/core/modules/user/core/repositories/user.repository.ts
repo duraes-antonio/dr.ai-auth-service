@@ -7,12 +7,6 @@ export interface UserForUpdate extends Entity {
     name?: string;
 }
 
-export type FindUserByEmail = (email: string) => Promise<User | undefined>;
-
-export type PersistUser = (user: AddUserInput) => Promise<number>;
-
-export type UpdateUser = (user: UserForUpdate) => Promise<void>;
-
 export interface IFindUserByEmail {
     findByEmail(email: string): Promise<User | undefined>;
 }

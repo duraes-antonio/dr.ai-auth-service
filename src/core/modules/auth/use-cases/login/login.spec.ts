@@ -1,29 +1,28 @@
 import { LoginCredentialsCase } from './login';
 import { LoginCredentialsInput } from '../../core/use-cases/login';
 import { TokenGeneratorWrapper } from '../../../../ports/token/token-generator';
-import {
-    findByEmailMock,
-    userEmailMock,
-} from '../../../../../__mocks__/repositories/find-user';
 import { NotFoundError } from '../../../../errors/not-found';
-import { HashComparator } from '../../../../ports/hash-manager/hash-manager';
 import { RequiredError } from '../../../../errors/required';
+import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
+import { HashManager } from '../../../../ports/hash-manager/hash-manager';
+import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
+import { IFindUserByEmail } from '../../../user/core/repositories/user.repository';
+import { userEmailMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
 
+const containerDI = getContainerDI();
 const mockedToken = 'token';
+const hashComparator = containerDI.get<HashManager>(TYPES.HashManager);
+const findByEmail = containerDI.get<IFindUserByEmail>(TYPES.IFindUserByEmail);
 
 const tokenGeneratorMock =
     jest.fn() as jest.MockedFunction<TokenGeneratorWrapper>;
-tokenGeneratorMock.mockResolvedValue(mockedToken);
 
-const hashComparatorMock = jest.fn() as jest.MockedFunction<HashComparator>;
-hashComparatorMock.mockImplementation((plain, hashed) =>
-    Promise.resolve(plain === hashed)
-);
+tokenGeneratorMock.mockResolvedValue(mockedToken);
 
 const useCase = new LoginCredentialsCase(
     tokenGeneratorMock,
-    findByEmailMock,
-    hashComparatorMock
+    findByEmail,
+    hashComparator
 );
 
 const loginDataOk: LoginCredentialsInput = {

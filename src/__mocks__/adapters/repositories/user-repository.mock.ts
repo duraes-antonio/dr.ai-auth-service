@@ -1,14 +1,13 @@
 import {
-    FindUserByEmail,
     IUserRepository,
     UserForUpdate,
-} from '../../core/modules/user/core/repositories/user.repository';
+} from '../../../core/modules/user/core/repositories/user.repository';
 import { mock } from 'jest-mock-extended';
-import { userIdMock } from '../use-case/register-user';
-import { EmailAddress } from '../../core/value-objects/email/email';
-import { emailValidatorMock } from '../email.validator';
-import { User } from '../../core/modules/user/core/entities/user.model';
-import { AddUserInput } from '../../core/modules/user/core/use-cases/register-user';
+import { userIdMock } from '../../use-case/register-user';
+import { EmailAddress } from '../../../core/value-objects/email/email';
+import { emailValidatorMock } from '../../email.validator';
+import { User } from '../../../core/modules/user/core/entities/user.model';
+import { AddUserInput } from '../../../core/modules/user/core/use-cases/register-user';
 import { injectable } from 'inversify';
 import { when } from 'jest-when';
 
@@ -24,8 +23,9 @@ export const existentUserMock = {
 @injectable()
 export class UserRepositoryMock implements IUserRepository {
     readonly userRepositoryMock = mock<IUserRepository>();
-    readonly findByEmailMock =
-        jest.fn() as jest.MockedFunction<FindUserByEmail>;
+    readonly findByEmailMock = jest.fn();
+    readonly persistMock = jest.fn();
+    readonly updateMock = jest.fn();
 
     constructor() {
         when(this.findByEmailMock)

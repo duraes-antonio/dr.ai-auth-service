@@ -3,17 +3,17 @@ import {
     LoginCredentialsInput,
 } from '../../core/use-cases/login';
 import { TokenGeneratorWrapper } from '../../../../ports/token/token-generator';
-import { FindUserByEmail } from '../../../user/core/repositories/user.repository';
 import { UserLogged } from '../../../user/core/use-cases/register-user';
-import { HashComparator } from '../../../../ports/hash-manager/hash-manager';
 import { NotFoundError } from '../../../../errors/not-found';
 import { RequiredError } from '../../../../errors/required';
+import { HashManager } from '../../../../ports/hash-manager/hash-manager';
+import { IFindUserByEmail } from '../../../user/core/repositories/user.repository';
 
 export class LoginCredentialsCase implements ILoginCredentialsCase {
     constructor(
         private readonly tokenGenerator: TokenGeneratorWrapper,
-        private readonly findUserByEmail: FindUserByEmail,
-        private readonly hashComparator: HashComparator
+        private readonly findUserByEmail: IFindUserByEmail,
+        private readonly hashManager: HashManager
     ) {}
 
     async execute(input: LoginCredentialsInput): Promise<string> {
@@ -21,7 +21,9 @@ export class LoginCredentialsCase implements ILoginCredentialsCase {
             throw new RequiredError('credentials');
         }
 
-        const userByEmail = await this.findUserByEmail(input.username);
+        const userByEmail = await this.findUserByEmail.findByEmail(
+            input.username
+        );
 
         if (!userByEmail) {
             this.throwNotFound();
@@ -29,7 +31,7 @@ export class LoginCredentialsCase implements ILoginCredentialsCase {
 
         const { password, ...user } = userByEmail;
 
-        const passwordMatch = await this.hashComparator(
+        const passwordMatch = await this.hashManager.compare(
             password,
             input.password
         );

@@ -1,16 +1,13 @@
-type HashManagerOptions = {
+export type HashManagerOptions = {
     salt?: Buffer;
 };
 
-type HashComparator = (
-    hash: string,
-    plain: string,
-    options?: HashManagerOptions
-) => Promise<boolean>;
+export interface HashManager {
+    compare(
+        hash: string,
+        plain: string,
+        options?: HashManagerOptions
+    ): Promise<boolean>;
 
-type HashGenerator = (
-    plain: string,
-    options?: HashManagerOptions
-) => Promise<string>;
-
-export { HashComparator, HashGenerator, HashManagerOptions };
+    generate(plain: string, options?: HashManagerOptions): Promise<string>;
+}

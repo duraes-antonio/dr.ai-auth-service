@@ -1,13 +1,13 @@
-import { UpdateUser } from '../../core/repositories/user.repository';
 import {
     IUpdateUserCase as IUpdateUserCase,
     UpdateUserInput,
 } from '../../core/use-cases/update-user';
 import { FileStorage } from '../../../../ports/file-storage/file-storage';
+import { IUpdateUser } from '../../core/repositories/user.repository';
 
 class UpdateUserCase implements IUpdateUserCase {
     constructor(
-        private readonly updateUserRepository: UpdateUser,
+        private readonly updateUser: IUpdateUser,
         private readonly fileStorage: FileStorage
     ) {}
 
@@ -16,14 +16,14 @@ class UpdateUserCase implements IUpdateUserCase {
             return;
         }
 
-        const { name, image } = input;
+        const { id, name, image } = input;
         let imageUrl: string | undefined;
 
         if (image) {
             imageUrl = await this.fileStorage.save(image);
         }
 
-        return this.updateUserRepository({ name, imageUrl });
+        return this.updateUser.update({ id, name, imageUrl });
     }
 }
 

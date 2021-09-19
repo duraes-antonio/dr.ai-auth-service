@@ -13,14 +13,14 @@ import {
     IPersistUser,
 } from '../../core/repositories/user.repository';
 import { ConflictError } from '../../../../errors/conflict';
-import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
+import { HashManager } from '../../../../ports/hash-manager/hash-manager';
 
 class RegisterUserCase implements IRegisterUserCase {
     constructor(
         private readonly emailValidator: EmailValidator,
         private readonly findUser: IFindUserByEmail,
         private readonly persistUser: IPersistUser,
-        private readonly hashGenerator: HashGenerator
+        private readonly hashManager: HashManager
     ) {}
 
     async execute(input: AddUserInput): Promise<UserLogged> {
@@ -51,7 +51,7 @@ class RegisterUserCase implements IRegisterUserCase {
 
         const userToPersist: AddUserInput = {
             ...input,
-            password: await this.hashGenerator(input.password),
+            password: await this.hashManager.generate(input.password),
         };
 
         const userId = await this.persistUser.persist(userToPersist);

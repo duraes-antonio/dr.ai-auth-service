@@ -12,12 +12,12 @@ import {
     IFindUserByEmail,
     IPersistUser,
 } from '../../core/repositories/user.repository';
-import { HashGenerator } from '../../../../ports/hash-manager/hash-manager';
 import { emptyString } from '../../../../../__mocks__/values/string';
 
-import { existentUserMock } from '../../../../../__mocks__/repositories/user-repository.mock';
+import { existentUserMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
 import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
 import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
+import { HashManager } from '../../../../ports/hash-manager/hash-manager';
 
 const inputExistentUser: AddUserInput = {
     name: existentUserMock.name,
@@ -36,25 +36,23 @@ const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 const containerDI = getContainerDI();
 const findUserMock = containerDI.get<IFindUserByEmail>(TYPES.IFindUserByEmail);
 const persistUserMock = containerDI.get<IPersistUser>(TYPES.IPersistUser);
+const hashManager = containerDI.get<HashManager>(TYPES.HashManager);
 
 const emailValidatorFailMock = jest.fn() as jest.MockedFunction<EmailValidator>;
 emailValidatorFailMock.mockImplementation(() => [new InvalidEmail()]);
-
-const hashGeneratorMock = jest.fn() as jest.MockedFunction<HashGenerator>;
-hashGeneratorMock.mockResolvedValue(passwordHashedMock);
 
 const useCaseInstanceMailFail = new RegisterUserCase(
     emailValidatorFailMock,
     findUserMock,
     persistUserMock,
-    hashGeneratorMock
+    hashManager
 );
 
 const useCaseInstance = new RegisterUserCase(
     emailValidatorMock,
     findUserMock,
     persistUserMock,
-    hashGeneratorMock
+    hashManager
 );
 
 it('should throw an error if input is not received', async () => {

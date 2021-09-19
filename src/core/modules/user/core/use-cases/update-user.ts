@@ -1,9 +1,8 @@
 export type UpdateUserInput = {
+    id: number;
     name: string;
-    image: File;
+    image?: File;
 };
-
-// export type UpdateUserCase = UseCase<UpdateUserInput, void>;
 
 export interface IUpdateUserCase {
     execute(input: UpdateUserInput): Promise<void>;
