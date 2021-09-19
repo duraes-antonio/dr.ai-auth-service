@@ -5,10 +5,9 @@ type DefaultErrorInput = {
     message: string;
 };
 
-class DefaultError extends Error {
-    readonly code = StatusCodes.INTERNAL_SERVER_ERROR;
-    readonly message =
-        'Oops! An unexpected error has occurred. Please try again in a few minutes.';
+abstract class DefaultError extends Error {
+    readonly code!: StatusCodes;
+    readonly message!: string;
 
     constructor(input: DefaultErrorInput) {
         super(input.message);
