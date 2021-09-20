@@ -6,7 +6,9 @@
 	"scripts": {
 		"build": "yarn tsc",
 		"start": "npm run build && node src",
-		"dev": "yarn build && nodemon dist/src/index.js",
+		"clean": "npx rimraf dist",
+		"dev": "set NODE_ENV=development && yarn clean && tsc && nodemon",
+		"prod": "set NODE_ENV=production && yarn clean && node dist/src",
 		"test": "jest --watch --coverage",
 		"test:coverage": "jest --watch --collect-coverage"
 	},
