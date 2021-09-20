@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Container } from 'inversify';
 import { containerDITest } from './di-container-test';
 import { containerDIProd } from './di-container-prod';
-import { EnvironmentType } from '../../../environment-types';
+import { EnvironmentType } from '../../../environment/environment-types';
 
 const containersByEnv: { [key in EnvironmentType]: Container } = {
     [EnvironmentType.TEST]: containerDITest,
@@ -11,5 +11,7 @@ const containersByEnv: { [key in EnvironmentType]: Container } = {
 };
 
 export function getContainerDI(): Container {
-    return containersByEnv[process.env.NODE_ENV];
+    const env: EnvironmentType =
+        <EnvironmentType>process?.env?.NODE_ENV ?? EnvironmentType.DEV;
+    return containersByEnv[env];
 }
