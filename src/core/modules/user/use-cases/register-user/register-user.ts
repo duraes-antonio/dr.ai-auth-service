@@ -14,13 +14,18 @@ import {
 } from '../../core/repositories/user.repository';
 import { ConflictError } from '../../../../errors/conflict';
 import { HashManager } from '../../../../ports/hash-manager/hash-manager';
+import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
+import { inject, injectable } from 'inversify';
 
-class RegisterUserCase implements IRegisterUserCase {
+@injectable()
+export class RegisterUserCase implements IRegisterUserCase {
     constructor(
-        private readonly emailValidator: EmailValidator,
-        private readonly findUser: FindUserByEmail,
-        private readonly persistUser: PersistUser,
-        private readonly hashManager: HashManager
+        @inject(TYPES.EmailValidator)
+        private emailValidator: EmailValidator,
+        @inject(TYPES.FindUserByEmail)
+        private findUser: FindUserByEmail,
+        @inject(TYPES.PersistUser) private persistUser: PersistUser,
+        @inject(TYPES.HashManager) private hashManager: HashManager
     ) {}
 
     async execute(input: AddUserInput): Promise<UserLogged> {
@@ -59,5 +64,3 @@ class RegisterUserCase implements IRegisterUserCase {
         return { ...input, id: userId };
     }
 }
-
-export { RegisterUserCase };

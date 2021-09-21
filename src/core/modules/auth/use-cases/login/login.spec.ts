@@ -1,12 +1,13 @@
+import 'reflect-metadata';
 import { LoginCredentialsCase } from './login';
 import { LoginCredentialsInput } from '../../core/use-cases/login';
 import { NotFoundError } from '../../../../errors/not-found';
 import { RequiredError } from '../../../../errors/required';
-import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
 import { HashManager } from '../../../../ports/hash-manager/hash-manager';
 import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
 import { FindUserByEmail } from '../../../user/core/repositories/user.repository';
-import { userEmailMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
+import { userValidEmailMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
+import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
 
 const containerDI = getContainerDI();
 const hashComparator = containerDI.get<HashManager>(TYPES.HashManager);
@@ -16,7 +17,7 @@ const useCase = new LoginCredentialsCase(findByEmail, hashComparator);
 
 const loginDataOk: LoginCredentialsInput = {
     password: 'password',
-    username: userEmailMock,
+    username: userValidEmailMock,
 };
 
 const loginDataInvalidPass: LoginCredentialsInput = {

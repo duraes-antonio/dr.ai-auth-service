@@ -7,11 +7,14 @@ import { NotFoundError } from '../../../../errors/not-found';
 import { RequiredError } from '../../../../errors/required';
 import { HashManager } from '../../../../ports/hash-manager/hash-manager';
 import { FindUserByEmail } from '../../../user/core/repositories/user.repository';
+import { inject } from 'inversify';
+import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
 
 export class LoginCredentialsCase implements ILoginCredentialsCase {
     constructor(
-        private readonly findUserByEmail: FindUserByEmail,
-        private readonly hashManager: HashManager
+        @inject(TYPES.FindUserByEmail)
+        private findUserByEmail: FindUserByEmail,
+        @inject(TYPES.HashManager) private hashManager: HashManager
     ) {}
 
     async execute(input: LoginCredentialsInput): Promise<UserLogged> {
