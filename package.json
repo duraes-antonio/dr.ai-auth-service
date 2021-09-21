@@ -7,9 +7,9 @@
 		"build": "yarn tsc",
 		"start": "npm run build && node src",
 		"clean": "npx rimraf dist",
-		"dev": "set NODE_ENV=development && yarn clean && tsc && nodemon",
-		"prod": "set NODE_ENV=production && yarn clean && node dist/src",
-		"test": "jest --watch --coverage",
+		"dev": "set NODE_ENV=dev && yarn clean && tsc && nodemon",
+		"prod": "set NODE_ENV=prod && yarn clean && node dist/src",
+		"test": "set NODE_ENV=test && jest --watch --coverage",
 		"test:coverage": "jest --watch --collect-coverage"
 	},
 	"keywords": [],
@@ -42,6 +42,7 @@
 		"jest": "^27.1.1",
 		"jest-mock-extended": "^2.0.2-beta2",
 		"jest-when": "^3.3.1",
+		"moq.ts": "^7.3.4",
 		"nodemon": "^2.0.12",
 		"prettier": "^2.3.2",
 		"prisma": "^3.0.2"
