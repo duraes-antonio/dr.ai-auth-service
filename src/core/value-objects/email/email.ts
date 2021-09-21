@@ -1,14 +1,17 @@
 import { FormatError, Validatable } from '../../ports/validation/validation';
 import { EmailValidator } from '../../ports/validation/validators/email.validator';
+import { inject } from 'inversify';
+import { TYPES } from '../../../main/config/dependency-injection/inversify/di-types';
 
 class EmailAddress implements Validatable<string> {
     readonly valid: boolean;
     readonly value: string;
 
     constructor(
-        private readonly validator: EmailValidator,
-        private readonly rawValue: string,
-        private readonly maxLength = 64
+        @inject(TYPES.EmailValidator)
+        private validator: EmailValidator,
+        private rawValue: string,
+        private maxLength = 64
     ) {
         this.valid = !this.validate(rawValue);
         this.value = rawValue;
@@ -16,7 +19,7 @@ class EmailAddress implements Validatable<string> {
 
     validate(value: string): FormatError[] | undefined {
         const { maxLength } = this;
-        return this.validator({ value, maxLength });
+        return this.validator.validate({ value, maxLength });
     }
 }
 

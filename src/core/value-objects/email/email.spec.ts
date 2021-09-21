@@ -1,66 +1,29 @@
+import 'reflect-metadata';
 import { EmailAddress } from './email';
 import {
     EmailValidator,
     EmailValidatorInput,
 } from '../../ports/validation/validators/email.validator';
-import { factoryMessageError } from '../../errors/error-message.factory';
-import { FormatError } from '../../ports/validation/validation';
+import { TYPES } from '../../../main/config/dependency-injection/inversify/di-types';
+import { validEmail } from '../../../__mocks__/adapters/validators/email-validator.mock';
+import { getContainerDI } from '../../../main/config/dependency-injection/inversify/containers/di-container';
 
-const emailValidatorMock = jest.fn() as jest.MockedFunction<EmailValidator>;
-emailValidatorMock.mockImplementation(
-    ({ maxLength, value }: EmailValidatorInput) => {
-        if (maxLength && value.length > maxLength) {
-            return [
-                {
-                    message: factoryMessageError.maxLength('email', maxLength),
-                },
-            ];
-        }
-    }
-);
+const container = getContainerDI();
+const emailValidator = container.get<EmailValidator>(TYPES.EmailValidator);
 
-describe('Email Model', function () {
-    it('should call validator when initialize', function () {
-        const expectedInput: EmailValidatorInput = {
-            value: 'email@email.com',
-            maxLength: 32,
-        };
-        const emailAddress = new EmailAddress(
-            emailValidatorMock,
-            expectedInput.value,
-            expectedInput.maxLength
-        );
-        expect(emailAddress.valid).toBe(true);
-        expect(emailValidatorMock).toBeCalledTimes(1);
-        expect(emailValidatorMock).toBeCalledWith(expectedInput);
-    });
+beforeAll(() => jest.spyOn(emailValidator, 'validate'));
 
-    it('should return errors when call validate() with incorrect values', function () {
-        // arrange
-        const expectedInput: Required<EmailValidatorInput> = {
-            value: 'a@a.c',
-            maxLength: 2,
-        };
-        const emailAddress = new EmailAddress(
-            emailValidatorMock,
-            expectedInput.value,
-            expectedInput.maxLength
-        );
-        const validateSpy = jest.spyOn(emailAddress, 'validate');
-
-        // act
-        const errors = emailAddress.validate(expectedInput.value);
-
-        // asset
-        expect(emailAddress.valid).toBe(false);
-        expect(validateSpy).toBeCalledTimes(1);
-        expect(errors).toEqual<FormatError[]>([
-            {
-                message: factoryMessageError.maxLength(
-                    'email',
-                    expectedInput.maxLength
-                ),
-            },
-        ]);
-    });
+it('should call validator when initialize', function () {
+    const expectedInput: EmailValidatorInput = {
+        value: validEmail,
+        maxLength: 32,
+    };
+    const emailAddress = new EmailAddress(
+        emailValidator,
+        expectedInput.value,
+        expectedInput.maxLength
+    );
+    expect(emailValidator.validate).toBeCalledWith(expectedInput);
+    expect(emailValidator.validate).toBeCalledTimes(1);
+    expect(emailAddress.valid).toBe(true);
 });
