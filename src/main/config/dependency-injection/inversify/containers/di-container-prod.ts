@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Container } from 'inversify';
+import {Container} from 'inversify';
 import {
     FindUserByEmail,
     PersistUser,
@@ -51,6 +51,6 @@ containerDIProd
     .to(UserRepositoryPostgresql);
 containerDIProd.bind<UpdateUser>(TYPES.UpdateUser).to(UserRepositoryPostgresql);
 
-export {containerDIProd};
+export { containerDIProd };
 
 export default containerDIProd;
