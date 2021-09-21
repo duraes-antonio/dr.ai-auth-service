@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { containerDITest } from './di-container-test';
-import { containerDIProd } from './di-container-prod';
 import { EnvironmentType } from '../../../environment/environment-types';
+import containerDITest from './di-container-test';
+import containerDIProd from './di-container-prod';
 
 const containersByEnv: { [key in EnvironmentType]: Container } = {
     [EnvironmentType.TEST]: containerDITest,

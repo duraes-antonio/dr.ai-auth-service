@@ -1,12 +1,5 @@
 export enum EnvironmentType {
-    PROD = 'production',
-    DEV = 'development',
+    PROD = 'prod',
+    DEV = 'dev',
     TEST = 'test',
 }
-
-// const dotenv = require('dotenv');
-// const path = require('path');
-//
-// dotenv.config({
-//     path: path.resolve(__dirname, `${process.env.NODE_ENV}.env`),
-// });
