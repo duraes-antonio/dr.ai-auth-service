@@ -12,13 +12,13 @@ import { HashManagerMock } from '../../../../../__mocks__/adapters/hash-manager/
 import { EmailValidator } from '../../../../../core/ports/validation/validators/email.validator';
 import { EmailValidatorMock } from '../../../../../__mocks__/adapters/validators/email-validator.mock';
 import { RegisterUserController } from '../../../../infra/controllers/user/user-register.controller';
-import { UpdateUserController } from '../../../../infra/controllers/user/user-update.controller';
 import { IRegisterUserCase } from '../../../../../core/modules/user/core/use-cases/register-user';
 import { IUpdateUserCase } from '../../../../../core/modules/user/core/use-cases/update-user';
 import { RegisterUserCase } from '../../../../../core/modules/user/use-cases/register-user/register-user';
 import { UpdateUserCase } from '../../../../../core/modules/user/use-cases/update-user/update-user';
 import { FileStorage } from '../../../../../core/ports/file-storage/file-storage';
 import { factoryFileStorageMock } from '../../../../../__mocks__/adapters/file/file-storage.mock';
+import { UpdateUserController } from '../../../../infra/controllers/user/user-update.controlller';
 
 const containerDITest = new Container();
 
@@ -59,5 +59,3 @@ containerDITest
     .toDynamicValue(factoryUserRepositoryMock);
 
 export { containerDITest };
-
-export default containerDITest;

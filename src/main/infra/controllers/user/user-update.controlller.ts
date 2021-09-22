@@ -1,9 +1,9 @@
-import { BaseController, ControllerSuccessResponse } from '../base.controller';
 import {
     IUpdateUserCase,
     UpdateUserInput,
 } from '../../../../core/modules/user/core/use-cases/update-user';
 import { StatusCodes } from 'http-status-codes';
+import { BaseController, ControllerSuccessResponse } from '../base.controller';
 
 export class UpdateUserController extends BaseController<
     UpdateUserInput,

@@ -2,19 +2,16 @@ import { DefaultError } from '../../../core/errors/default';
 import { StatusCodes } from 'http-status-codes';
 import { UnknownError } from '../../../core/errors/unknown';
 
-export interface ControllerSuccessResponse<T> {
-    code: StatusCodes;
-    result: T;
-}
-
-export interface ControllerErrorResponse {
+export interface ControllerResponse<T> {
     code: StatusCodes;
     errors: string[];
+    result?: T | undefined | null;
 }
 
-export type ControllerResponse<T> =
-    | ControllerErrorResponse
-    | ControllerSuccessResponse<T>;
+export interface ControllerSuccessResponse<T> {
+    code: StatusCodes;
+    result?: T;
+}
 
 export abstract class BaseController<TIn = unknown, TOut = unknown> {
     async handle(input: TIn): Promise<ControllerResponse<TOut>> {
@@ -30,7 +27,6 @@ export abstract class BaseController<TIn = unknown, TOut = unknown> {
                 error instanceof DefaultError ? error : new UnknownError();
             return {
                 code: defaultError.code,
-                result: undefined,
                 errors: [defaultError.message],
             };
         }
