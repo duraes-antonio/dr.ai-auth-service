@@ -10,6 +10,7 @@
 		"dev": "set NODE_ENV=dev&& yarn clean && tsc && nodemon",
 		"prod": "set NODE_ENV=prod&& yarn clean && node dist/src",
 		"test": "set NODE_ENV=test&& jest --watch --coverage",
+		"test:ci": "set NODE_ENV=test&& jest --coverage --ci --detectOpenHandles",
 		"test:coverage": "jest --watch --collect-coverage"
 	},
 	"keywords": [],
