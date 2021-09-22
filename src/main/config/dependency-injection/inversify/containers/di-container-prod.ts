@@ -12,11 +12,11 @@ import {RegisterUserCase} from '../../../../../core/modules/user/use-cases/regis
 import {IUpdateUserCase} from '../../../../../core/modules/user/core/use-cases/update-user';
 import {UpdateUserCase} from '../../../../../core/modules/user/use-cases/update-user/update-user';
 import {RegisterUserController} from '../../../../infra/controllers/user/user-register.controller';
-import {UpdateUserController} from '../../../../infra/controllers/user/user-update.controller';
 import {EmailValidator} from '../../../../../core/ports/validation/validators/email.validator';
 import {EmailValidatorMock} from '../../../../../__mocks__/adapters/validators/email-validator.mock';
 import {HashManagerArgon2} from '../../../../adapters/hash-manager/argon2/hash-manager-argon2';
 import {HashManager} from '../../../../../core/ports/hash-manager/hash-manager';
+import {UpdateUserController} from '../../../../infra/controllers/user/user-update.controlller';
 
 const containerDIProd = new Container();
 
