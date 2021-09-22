@@ -1,6 +1,7 @@
 import { DefaultError } from '../../../core/errors/default';
 import { StatusCodes } from 'http-status-codes';
 import { UnknownError } from '../../../core/errors/unknown';
+import { injectable } from 'inversify';
 
 export interface ControllerResponse<T> {
     code: StatusCodes;
@@ -13,6 +14,7 @@ export interface ControllerSuccessResponse<T> {
     result?: T;
 }
 
+@injectable()
 export abstract class BaseController<TIn = unknown, TOut = unknown> {
     async handle(input: TIn): Promise<ControllerResponse<TOut>> {
         try {

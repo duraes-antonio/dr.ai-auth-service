@@ -5,12 +5,18 @@ import {
 } from '../../../../core/modules/user/core/use-cases/register-user';
 import { BaseController, ControllerSuccessResponse } from '../base.controller';
 import { StatusCodes } from 'http-status-codes';
+import { inject, injectable } from 'inversify';
+import { USE_CASE_TYPES } from '../../../config/dependency-injection/inversify/di-types';
 
+@injectable()
 export class RegisterUserController extends BaseController<
     AddUserInput,
     UserLogged
 > {
-    constructor(private readonly registerCase: IRegisterUserCase) {
+    constructor(
+        @inject(USE_CASE_TYPES.IRegisterUserCase)
+        private readonly registerCase: IRegisterUserCase
+    ) {
         super();
     }
 
