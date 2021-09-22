@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { HashManagerOptions } from '../../../../core/ports/hash-manager/hash-manager';
 import argon2 from 'argon2';
 import { HashManagerArgon2 } from './hash-manager-argon2';

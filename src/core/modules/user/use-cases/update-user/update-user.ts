@@ -4,11 +4,14 @@ import {
 } from '../../core/use-cases/update-user';
 import { FileStorage } from '../../../../ports/file-storage/file-storage';
 import { UpdateUser } from '../../core/repositories/user.repository';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
 
-class UpdateUserCase implements IUpdateUserCase {
+@injectable()
+export class UpdateUserCase implements IUpdateUserCase {
     constructor(
-        private readonly updateUser: UpdateUser,
-        private readonly fileStorage: FileStorage
+        @inject(TYPES.UpdateUser) private updateUser: UpdateUser,
+        @inject(TYPES.FileStorage) private fileStorage: FileStorage
     ) {}
 
     async execute(input: UpdateUserInput): Promise<void> {
@@ -26,5 +29,3 @@ class UpdateUserCase implements IUpdateUserCase {
         return this.updateUser.update({ id, name, imageUrl });
     }
 }
-
-export { UpdateUserCase };

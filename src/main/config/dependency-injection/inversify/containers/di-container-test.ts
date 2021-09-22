@@ -5,16 +5,59 @@ import {
     PersistUser,
     UpdateUser,
 } from '../../../../../core/modules/user/core/repositories/user.repository';
-import { TYPES } from '../di-types';
-import { UserRepositoryMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
+import { TYPES, USE_CASE_TYPES } from '../di-types';
+import { factoryUserRepositoryMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
 import { HashManager } from '../../../../../core/ports/hash-manager/hash-manager';
 import { HashManagerMock } from '../../../../../__mocks__/adapters/hash-manager/hash-manager.mock';
+import { EmailValidator } from '../../../../../core/ports/validation/validators/email.validator';
+import { EmailValidatorMock } from '../../../../../__mocks__/adapters/validators/email-validator.mock';
+import { RegisterUserController } from '../../../../infra/controllers/user/user-register.controller';
+import { UpdateUserController } from '../../../../infra/controllers/user/user-update.controller';
+import { IRegisterUserCase } from '../../../../../core/modules/user/core/use-cases/register-user';
+import { IUpdateUserCase } from '../../../../../core/modules/user/core/use-cases/update-user';
+import { RegisterUserCase } from '../../../../../core/modules/user/use-cases/register-user/register-user';
+import { UpdateUserCase } from '../../../../../core/modules/user/use-cases/update-user/update-user';
+import { FileStorage } from '../../../../../core/ports/file-storage/file-storage';
+import { factoryFileStorageMock } from '../../../../../__mocks__/adapters/file/file-storage.mock';
 
-export const containerDITest = new Container();
+const containerDITest = new Container();
 
-containerDITest.bind<PersistUser>(TYPES.PersistUser).to(UserRepositoryMock);
+// External adapters
+containerDITest.bind<HashManager>(TYPES.HashManager).to(HashManagerMock);
+containerDITest
+    .bind<EmailValidator>(TYPES.EmailValidator)
+    .to(EmailValidatorMock);
+containerDITest
+    .bind<FileStorage>(TYPES.FileStorage)
+    .toDynamicValue(() => factoryFileStorageMock());
+
+// Controllers
+containerDITest
+    .bind<RegisterUserController>(RegisterUserController)
+    .to(RegisterUserController);
+containerDITest
+    .bind<UpdateUserController>(UpdateUserController)
+    .to(UpdateUserController);
+
+// Use cases
+containerDITest
+    .bind<IRegisterUserCase>(USE_CASE_TYPES.IRegisterUserCase)
+    .to(RegisterUserCase);
+containerDITest
+    .bind<IUpdateUserCase>(USE_CASE_TYPES.IUpdateUserCase)
+    .to(UpdateUserCase);
+
+// Repositories
+containerDITest
+    .bind<PersistUser>(TYPES.PersistUser)
+    .toDynamicValue(factoryUserRepositoryMock);
 containerDITest
     .bind<FindUserByEmail>(TYPES.FindUserByEmail)
-    .to(UserRepositoryMock);
-containerDITest.bind<UpdateUser>(TYPES.UpdateUser).to(UserRepositoryMock);
-containerDITest.bind<HashManager>(TYPES.HashManager).to(HashManagerMock);
+    .toDynamicValue(factoryUserRepositoryMock);
+containerDITest
+    .bind<UpdateUser>(TYPES.UpdateUser)
+    .toDynamicValue(factoryUserRepositoryMock);
+
+export { containerDITest };
+
+export default containerDITest;

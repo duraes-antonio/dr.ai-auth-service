@@ -3,6 +3,7 @@ import {
     LoginCredentialsInput,
 } from '../../../core/modules/auth/core/use-cases/login';
 import { ILogoutCase } from '../../../core/modules/auth/core/use-cases/logout';
+import { UserLogged } from '../../../core/modules/user/core/use-cases/register-user';
 
 export class AuthController {
     constructor(
@@ -10,7 +11,7 @@ export class AuthController {
         private readonly logoutCase: ILogoutCase
     ) {}
 
-    login(input: LoginCredentialsInput): Promise<string> {
+    login(input: LoginCredentialsInput): Promise<UserLogged> {
         return this.loginCase.execute(input);
     }
 

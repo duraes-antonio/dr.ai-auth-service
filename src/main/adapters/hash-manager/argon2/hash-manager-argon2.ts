@@ -3,7 +3,9 @@ import {
     HashManager,
     HashManagerOptions,
 } from '../../../../core/ports/hash-manager/hash-manager';
+import { injectable } from 'inversify';
 
+@injectable()
 export class HashManagerArgon2 implements HashManager {
     compare(
         hash: string,

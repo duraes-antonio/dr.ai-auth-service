@@ -1,5 +1,5 @@
 export enum EnvironmentType {
-    PROD = 'production',
-    DEV = 'development',
+    PROD = 'prod',
+    DEV = 'dev',
     TEST = 'test',
 }

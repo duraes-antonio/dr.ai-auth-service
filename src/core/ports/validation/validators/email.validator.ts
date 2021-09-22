@@ -1,10 +1,8 @@
 import { Validator } from '../validation';
 
-type EmailValidatorInput = {
+export type EmailValidatorInput = {
     value: string;
     maxLength?: number;
 };
 
-type EmailValidator = Validator<EmailValidatorInput>;
-
-export { EmailValidator, EmailValidatorInput };
+export interface EmailValidator extends Validator<EmailValidatorInput> {}
