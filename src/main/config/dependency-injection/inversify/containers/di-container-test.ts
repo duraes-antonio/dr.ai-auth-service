@@ -59,5 +59,3 @@ containerDITest
     .toDynamicValue(factoryUserRepositoryMock);
 
 export { containerDITest };
-
-export default containerDITest;

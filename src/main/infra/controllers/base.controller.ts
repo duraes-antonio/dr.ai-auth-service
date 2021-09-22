@@ -1,21 +1,20 @@
 import { DefaultError } from '../../../core/errors/default';
 import { StatusCodes } from 'http-status-codes';
 import { UnknownError } from '../../../core/errors/unknown';
+import { injectable } from 'inversify';
+
+export interface ControllerResponse<T> {
+    code: StatusCodes;
+    errors: string[];
+    result?: T | undefined | null;
+}
 
 export interface ControllerSuccessResponse<T> {
     code: StatusCodes;
-    result: T;
+    result?: T;
 }
 
-export interface ControllerErrorResponse {
-    code: StatusCodes;
-    errors: string[];
-}
-
-export type ControllerResponse<T> =
-    | ControllerErrorResponse
-    | ControllerSuccessResponse<T>;
-
+@injectable()
 export abstract class BaseController<TIn = unknown, TOut = unknown> {
     async handle(input: TIn): Promise<ControllerResponse<TOut>> {
         try {
@@ -30,7 +29,6 @@ export abstract class BaseController<TIn = unknown, TOut = unknown> {
                 error instanceof DefaultError ? error : new UnknownError();
             return {
                 code: defaultError.code,
-                result: undefined,
                 errors: [defaultError.message],
             };
         }

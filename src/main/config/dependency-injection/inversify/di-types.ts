@@ -9,6 +9,10 @@ export const TYPES = {
     FileStorage: Symbol.for('FileStorage'),
 };
 
+export const ADAPTERS_TYPES = {
+    Server: Symbol.for('Server'),
+};
+
 export const USE_CASE_TYPES = {
     IRegisterUserCase: Symbol.for('IRegisterUserCase'),
     IUpdateUserCase: Symbol.for('IUpdateUserCase'),
