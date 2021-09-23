@@ -1,9 +1,11 @@
-import { Server } from '../../infra/http/server';
-import { HttpRouteInput } from '../../infra/http/http-router';
+import 'reflect-metadata';
 import fastify, { RouteOptions } from 'fastify';
 import http from 'http';
+import { Server } from '../../infra/http/server';
+import { HttpRouteInput } from '../../infra/http/http-router';
 import { BaseController } from '../../infra/controllers/base.controller';
 import { RouteGenericInterface } from 'fastify/types/route';
+import { injectable } from 'inversify';
 
 type FastifyRouteOptions = RouteOptions<
     http.Server,
@@ -27,6 +29,7 @@ function mapRouteToFastifyRoute(route: HttpRouteInput): FastifyRouteOptions {
     };
 }
 
+@injectable()
 export class ServerFastify implements Server {
     readonly fastifyInstance = fastify<http.Server>({ logger: true });
 
