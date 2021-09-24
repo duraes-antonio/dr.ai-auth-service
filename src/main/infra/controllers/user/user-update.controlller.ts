@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
     IUpdateUserCase,
     UpdateUserInput,
@@ -8,8 +9,7 @@ import { inject, injectable } from 'inversify';
 import { USE_CASE_TYPES } from '../../../config/dependency-injection/inversify/di-types';
 
 @injectable()
-export class UpdateUserController extends BaseController<
-    UpdateUserInput,
+export class UpdateUserController extends BaseController<UpdateUserInput,
     void
 > {
     constructor(

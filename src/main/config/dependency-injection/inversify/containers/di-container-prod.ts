@@ -19,6 +19,8 @@ import { HashManager } from '../../../../../core/ports/hash-manager/hash-manager
 import { UpdateUserController } from '../../../../infra/controllers/user/user-update.controlller';
 import { Server } from '../../../../infra/http/server';
 import { ServerFastify } from '../../../../adapters/server/server.fastify';
+import { FileStorage } from '../../../../../core/ports/file-storage/file-storage';
+import { factoryFileStorageMock } from '../../../../../__mocks__/adapters/file/file-storage.mock';
 
 const containerDIProd = new Container();
 
@@ -26,6 +28,9 @@ const containerDIProd = new Container();
 containerDIProd
     .bind<EmailValidator>(TYPES.EmailValidator)
     .to(EmailValidatorMock);
+containerDIProd
+    .bind<FileStorage>(TYPES.FileStorage)
+    .toDynamicValue(() => factoryFileStorageMock());
 containerDIProd.bind<HashManager>(TYPES.HashManager).to(HashManagerArgon2);
 containerDIProd.bind<Server>(ADAPTERS_TYPES.Server).to(ServerFastify);
 

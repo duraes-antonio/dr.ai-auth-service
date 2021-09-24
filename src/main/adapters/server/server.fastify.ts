@@ -1,9 +1,10 @@
+import 'reflect-metadata';
+import { fastify, RouteOptions } from 'fastify';
+import http from 'http';
 import { Server } from '../../infra/http/server';
 import { HttpRouteInput } from '../../infra/http/http-router';
-import fastify, { RouteOptions } from 'fastify';
-import http from 'http';
-import { BaseController } from '../../infra/controllers/base.controller';
 import { RouteGenericInterface } from 'fastify/types/route';
+import { injectable } from 'inversify';
 
 type FastifyRouteOptions = RouteOptions<
     http.Server,
@@ -13,13 +14,14 @@ type FastifyRouteOptions = RouteOptions<
     unknown
 >;
 
-function mapRouteToFastifyRoute(route: HttpRouteInput): FastifyRouteOptions {
+export function adapterToFastifyRoute(
+    route: HttpRouteInput
+): FastifyRouteOptions {
     const { handler, method, url } = route;
     return {
         handler: async (request, reply) => {
             const body = request.body;
-            const controller: BaseController = handler;
-            const { code, result, errors } = await controller.handle(body);
+            const { code, result, errors } = await handler.handle(body);
             reply.status(code).send(errors?.length ? { errors } : result);
         },
         method,
@@ -27,12 +29,13 @@ function mapRouteToFastifyRoute(route: HttpRouteInput): FastifyRouteOptions {
     };
 }
 
+@injectable()
 export class ServerFastify implements Server {
     readonly fastifyInstance = fastify<http.Server>({ logger: true });
 
     configureRoutes(routes: HttpRouteInput[]): void {
         routes.forEach((input) =>
-            this.fastifyInstance.route(mapRouteToFastifyRoute(input))
+            this.fastifyInstance.route(adapterToFastifyRoute(input))
         );
     }
 
