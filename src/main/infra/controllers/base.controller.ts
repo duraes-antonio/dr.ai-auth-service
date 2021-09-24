@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { DefaultError } from '../../../core/errors/default';
 import { StatusCodes } from 'http-status-codes';
 import { UnknownError } from '../../../core/errors/unknown';

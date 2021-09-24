@@ -8,3 +8,5 @@ const server = containerDI.get<Server>(ADAPTERS_TYPES.Server);
 const port = process.env.PORT ?? 3000;
 server.configureRoutes(USER_ROUTES);
 server.listen(port).then();
+
+export { server };
