@@ -17,3 +17,8 @@ export const USE_CASE_TYPES = {
     IRegisterUserCase: Symbol.for('IRegisterUserCase'),
     IUpdateUserCase: Symbol.for('IUpdateUserCase'),
 };
+
+export const INFRA_TYPES = {
+    PrismaClient: Symbol.for('PrismaClient'),
+    PrismaClientProvider: Symbol.for('PrismaClientProvider'),
+};

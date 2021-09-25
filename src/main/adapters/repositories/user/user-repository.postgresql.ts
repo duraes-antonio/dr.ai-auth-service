@@ -8,6 +8,7 @@ import {
 import { AddUserInput } from '../../../../core/modules/user/core/use-cases/register-user';
 import { injectable } from 'inversify';
 import { User } from '../../../../core/modules/user/core/entities/user.model';
+import { EntityId } from '../../../../core/entities/entity';
 
 const { user: userPrismaSchema } = new PrismaClient();
 
@@ -29,7 +30,7 @@ export class UserRepositoryPostgresql
         return userDto ?? undefined;
     }
 
-    async persist(user: AddUserInput): Promise<number> {
+    async persist(user: AddUserInput): Promise<EntityId> {
         const userCreated = await userPrismaSchema.create({ data: user });
         return userCreated.id;
     }

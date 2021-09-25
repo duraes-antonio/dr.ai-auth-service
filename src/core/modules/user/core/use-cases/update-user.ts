@@ -1,7 +1,8 @@
 import { IFile } from '../../../../../__mocks__/adapters/file/file-storage.mock';
+import { EntityId } from '../../../../entities/entity';
 
 export type UpdateUserInput = {
-    id: number;
+    id: EntityId;
     name: string;
     image?: IFile;
 };
