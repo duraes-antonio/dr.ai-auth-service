@@ -15,7 +15,7 @@ const emailValidatorMock = new EmailValidatorMock();
 export const existentUserMock = {
     email: new EmailAddress(emailValidatorMock, userValidEmailMock),
     password: 'password',
-    id: 1,
+    id: '1',
     name: 'User Name',
     imageUrl: 'https://image.jpeg',
 };

@@ -27,7 +27,7 @@ const inputNewUser: AddUserInput = {
     email: notExistentUserValidEmailMock,
 };
 const passwordHashedMock = 'password_hashed';
-const userIdMock = 1;
+const userIdMock = '1';
 const containerDI = getContainerDI();
 
 function makeSut() {
