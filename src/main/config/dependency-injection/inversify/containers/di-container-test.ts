@@ -5,7 +5,7 @@ import {
     PersistUser,
     UpdateUser,
 } from '../../../../../core/modules/user/core/repositories/user.repository';
-import { TYPES, USE_CASE_TYPES } from '../di-types';
+import { INFRA_TYPES, TYPES, USE_CASE_TYPES } from '../di-types';
 import { factoryUserRepositoryMock } from '../../../../../__mocks__/adapters/repositories/user-repository.mock';
 import { HashManager } from '../../../../../core/ports/hash-manager/hash-manager';
 import { HashManagerMock } from '../../../../../__mocks__/adapters/hash-manager/hash-manager.mock';
@@ -19,6 +19,9 @@ import { UpdateUserCase } from '../../../../../core/modules/user/use-cases/updat
 import { FileStorage } from '../../../../../core/ports/file-storage/file-storage';
 import { factoryFileStorageMock } from '../../../../../__mocks__/adapters/file/file-storage.mock';
 import { UpdateUserController } from '../../../../infra/controllers/user/user-update.controlller';
+import { PrismaClientProvider } from '../providers';
+import { PrismaClient } from '@prisma/client';
+import { prismaMock } from '../../../../../__mocks__/infra/prisma-client.mock';
 
 const containerDITest = new Container();
 
@@ -58,4 +61,12 @@ containerDITest
     .bind<UpdateUser>(TYPES.UpdateUser)
     .toDynamicValue(factoryUserRepositoryMock);
 
-export { containerDITest };
+// Another dependencies
+containerDITest.bind<PrismaClient>(PrismaClient).toConstantValue(prismaMock);
+containerDITest
+    .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
+    .toProvider<PrismaClient>(
+        (context) => () =>
+            Promise.resolve(context.container.get<PrismaClient>(PrismaClient))
+    );
+export {containerDITest};
