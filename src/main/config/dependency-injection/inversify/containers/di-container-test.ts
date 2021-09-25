@@ -69,4 +69,4 @@ containerDITest
         (context) => () =>
             Promise.resolve(context.container.get<PrismaClient>(PrismaClient))
     );
-export {containerDITest};
+export { containerDITest };

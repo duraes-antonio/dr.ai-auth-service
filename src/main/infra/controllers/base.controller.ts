@@ -7,7 +7,7 @@ import { injectable } from 'inversify';
 export interface ControllerResponse<T> {
     code: StatusCodes;
     errors: string[];
-    result?: T | undefined | null;
+    result?: T | null;
 }
 
 export interface ControllerSuccessResponse<T> {
