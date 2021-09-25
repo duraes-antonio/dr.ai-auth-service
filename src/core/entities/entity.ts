@@ -1,9 +1,11 @@
+type EntityId = string;
+
 interface Entity {
-    id: number;
+    id: EntityId;
 }
 
 interface NamedEntity extends Entity {
     name: string;
 }
 
-export { Entity, NamedEntity };
+export { EntityId, Entity, NamedEntity };
