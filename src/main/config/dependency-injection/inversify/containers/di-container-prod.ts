@@ -27,9 +27,10 @@ import { FileStorage } from '../../../../../core/ports/file-storage/file-storage
 import { factoryFileStorageMock } from '../../../../../__mocks__/adapters/file/file-storage.mock';
 import { UserRepositoryMongodb } from '../../../../adapters/repositories/user/mongo/user-repository.mongodb';
 import { PrismaClient } from '@prisma/client';
-import { PrismaClientProvider } from '../providers';
+import { PrismaClientProvider } from '../providers/providers';
 import IORedis from 'ioredis';
-import Redis from 'ioredis';
+import { ioRedisFactory } from '../../../../infra/factories/io-redis.factory';
+import { prismaClientProvider } from '../providers/prisma-client/prisma-client.provider';
 
 const containerDIProd = new Container();
 
@@ -39,7 +40,7 @@ containerDIProd
     .to(EmailValidatorMock);
 containerDIProd
     .bind<FileStorage>(TYPES.FileStorage)
-    .toDynamicValue(() => factoryFileStorageMock());
+    .toDynamicValue(factoryFileStorageMock);
 containerDIProd.bind<HashManager>(TYPES.HashManager).to(HashManagerArgon2);
 containerDIProd.bind<Server>(ADAPTERS_TYPES.Server).to(ServerFastify);
 
@@ -72,19 +73,9 @@ containerDIProd
     .toConstantValue(new PrismaClient());
 containerDIProd
     .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
-    .toProvider<PrismaClient>((context) => {
-        return async () => {
-            const client = context.container.get<PrismaClient>(PrismaClient);
-            await client.$connect();
-            return client;
-        };
-    });
-containerDIProd.bind<IORedis.Redis>(INFRA_TYPES.IORedis).toConstantValue(
-    new Redis({
-        port: process.env.REDIS_PORT,
-        host: process.env.REDIS_HOST,
-        password: process.env.REDIS_PASSWORD,
-    })
-);
+    .toProvider<PrismaClient>(prismaClientProvider);
+containerDIProd
+    .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
+    .toConstantValue(ioRedisFactory());
 
 export { containerDIProd };

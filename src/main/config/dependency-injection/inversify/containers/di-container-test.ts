@@ -19,11 +19,12 @@ import { UpdateUserCase } from '../../../../../core/modules/user/use-cases/updat
 import { FileStorage } from '../../../../../core/ports/file-storage/file-storage';
 import { factoryFileStorageMock } from '../../../../../__mocks__/adapters/file/file-storage.mock';
 import { UpdateUserController } from '../../../../infra/controllers/user/user-update.controlller';
-import { PrismaClientProvider } from '../providers';
+import { PrismaClientProvider } from '../providers/providers';
 import { PrismaClient } from '@prisma/client';
 import { prismaMock } from '../../../../../__mocks__/infra/prisma-client.mock';
 import IORedis from 'ioredis';
 import { ioRedisMock } from '../../../../../__mocks__/infra/io-redis.mock';
+import { prismaClientProvider } from '../providers/prisma-client/prisma-client.provider';
 
 const containerDITest = new Container();
 
@@ -34,7 +35,7 @@ containerDITest
     .to(EmailValidatorMock);
 containerDITest
     .bind<FileStorage>(TYPES.FileStorage)
-    .toDynamicValue(() => factoryFileStorageMock());
+    .toDynamicValue(factoryFileStorageMock);
 
 // Controllers
 containerDITest
@@ -64,13 +65,12 @@ containerDITest
     .toDynamicValue(factoryUserRepositoryMock);
 
 // Infra dependencies
-containerDITest.bind<PrismaClient>(PrismaClient).toConstantValue(prismaMock);
+containerDITest
+    .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
+    .toConstantValue(prismaMock);
 containerDITest
     .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
-    .toProvider<PrismaClient>(
-        (context) => () =>
-            Promise.resolve(context.container.get<PrismaClient>(PrismaClient))
-    );
+    .toProvider<PrismaClient>(prismaClientProvider);
 containerDITest
     .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
     .toConstantValue(ioRedisMock);
