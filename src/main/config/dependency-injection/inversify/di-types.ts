@@ -14,9 +14,10 @@ export const USE_CASE_TYPES = {
 };
 
 export const INFRA_TYPES = {
+    CacheService: Symbol.for('CacheService'),
+    FileStorage: Symbol.for('FileStorage'),
+    IORedis: Symbol.for('IORedis'),
     PrismaClient: Symbol.for('PrismaClient'),
     PrismaClientProvider: Symbol.for('PrismaClientProvider'),
-    IORedis: Symbol.for('IORedis'),
-    FileStorage: Symbol.for('FileStorage'),
     Server: Symbol.for('Server'),
 };

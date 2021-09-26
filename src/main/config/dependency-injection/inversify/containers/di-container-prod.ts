@@ -26,6 +26,9 @@ import { PrismaClientProvider } from '../providers/providers';
 import IORedis from 'ioredis';
 import { ioRedisFactory } from '../../../../infra/factories/io-redis.factory';
 import { prismaClientProvider } from '../providers/prisma-client/prisma-client.provider';
+import { CacheService } from '../../../../../core/ports/cache-service/cache-service';
+import { CacheServiceRedis } from '../../../../adapters/cache-service/cache-service.redis';
+import { containerDITest } from './di-container-test';
 
 const containerDIProd = new Container();
 
@@ -40,6 +43,9 @@ containerDIProd.bind<HashManager>(TYPES.HashManager).to(HashManagerArgon2);
 containerDIProd.bind<Server>(INFRA_TYPES.Server).to(ServerFastify);
 
 // Infra dependencies
+containerDITest
+    .bind<CacheService>(INFRA_TYPES.CacheService)
+    .to(CacheServiceRedis);
 containerDIProd
     .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
     .toConstantValue(new PrismaClient());
