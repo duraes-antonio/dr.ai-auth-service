@@ -7,7 +7,10 @@ import {
     UpdateUser,
     UserForUpdate,
 } from '../../core/repositories/user.repository';
-import { TYPES } from '../../../../../main/config/dependency-injection/inversify/di-types';
+import {
+    INFRA_TYPES,
+    TYPES,
+} from '../../../../../main/config/dependency-injection/inversify/di-types';
 import { getContainerDI } from '../../../../../main/config/dependency-injection/inversify/containers/di-container';
 import {
     imageMock,
@@ -23,7 +26,7 @@ const useCaseInput: UpdateUserInput = {
 
 function makeSut() {
     const updateRepository = containerDI.get<UpdateUser>(TYPES.UpdateUser);
-    const fileStorage = containerDI.get<FileStorage>(TYPES.FileStorage);
+    const fileStorage = containerDI.get<FileStorage>(INFRA_TYPES.FileStorage);
     const useCase = new UpdateUserCase(updateRepository, fileStorage);
     return { useCase, fileStorage, updateRepository };
 }

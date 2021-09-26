@@ -29,4 +29,9 @@ export const USER_ROUTES: HttpRouteInput[] = [
         HttpMethods.PATCH,
         containerDI.get<UpdateUserController>(UpdateUserController)
     ),
+    // createRouteInput(
+    //     'user/email',
+    //     HttpMethods.GET,
+    //     containerDI.get<FindUserByEmail>()
+    // ),
 ];

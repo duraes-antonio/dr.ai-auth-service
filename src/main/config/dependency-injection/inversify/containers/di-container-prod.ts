@@ -5,12 +5,7 @@ import {
     PersistUser,
     UpdateUser,
 } from '../../../../../core/modules/user/core/repositories/user.repository';
-import {
-    ADAPTERS_TYPES,
-    INFRA_TYPES,
-    TYPES,
-    USE_CASE_TYPES,
-} from '../di-types';
+import { INFRA_TYPES, TYPES, USE_CASE_TYPES } from '../di-types';
 import { IRegisterUserCase } from '../../../../../core/modules/user/core/use-cases/register-user';
 import { RegisterUserCase } from '../../../../../core/modules/user/use-cases/register-user/register-user';
 import { IUpdateUserCase } from '../../../../../core/modules/user/core/use-cases/update-user';
@@ -39,10 +34,21 @@ containerDIProd
     .bind<EmailValidator>(TYPES.EmailValidator)
     .to(EmailValidatorMock);
 containerDIProd
-    .bind<FileStorage>(TYPES.FileStorage)
+    .bind<FileStorage>(INFRA_TYPES.FileStorage)
     .toDynamicValue(factoryFileStorageMock);
 containerDIProd.bind<HashManager>(TYPES.HashManager).to(HashManagerArgon2);
-containerDIProd.bind<Server>(ADAPTERS_TYPES.Server).to(ServerFastify);
+containerDIProd.bind<Server>(INFRA_TYPES.Server).to(ServerFastify);
+
+// Infra dependencies
+containerDIProd
+    .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
+    .toConstantValue(new PrismaClient());
+containerDIProd
+    .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
+    .toProvider<PrismaClient>(prismaClientProvider);
+containerDIProd
+    .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
+    .toConstantValue(ioRedisFactory());
 
 // Controllers
 containerDIProd
@@ -66,16 +72,5 @@ containerDIProd
     .bind<FindUserByEmail>(TYPES.FindUserByEmail)
     .to(UserRepositoryMongodb);
 containerDIProd.bind<UpdateUser>(TYPES.UpdateUser).to(UserRepositoryMongodb);
-
-// Another dependencies
-containerDIProd
-    .bind<PrismaClient>(PrismaClient)
-    .toConstantValue(new PrismaClient());
-containerDIProd
-    .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
-    .toProvider<PrismaClient>(prismaClientProvider);
-containerDIProd
-    .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
-    .toConstantValue(ioRedisFactory());
 
 export { containerDIProd };

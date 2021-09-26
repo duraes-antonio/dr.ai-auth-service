@@ -34,7 +34,7 @@ containerDITest
     .bind<EmailValidator>(TYPES.EmailValidator)
     .to(EmailValidatorMock);
 containerDITest
-    .bind<FileStorage>(TYPES.FileStorage)
+    .bind<FileStorage>(INFRA_TYPES.FileStorage)
     .toDynamicValue(factoryFileStorageMock);
 
 // Controllers

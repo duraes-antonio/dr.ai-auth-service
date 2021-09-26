@@ -6,11 +6,6 @@ export const TYPES = {
     UpdateUser: Symbol.for('UpdateUser'),
     HashManager: Symbol.for('HashManager'),
     EmailValidator: Symbol.for('EmailValidator'),
-    FileStorage: Symbol.for('FileStorage'),
-};
-
-export const ADAPTERS_TYPES = {
-    Server: Symbol.for('Server'),
 };
 
 export const USE_CASE_TYPES = {
@@ -22,4 +17,6 @@ export const INFRA_TYPES = {
     PrismaClient: Symbol.for('PrismaClient'),
     PrismaClientProvider: Symbol.for('PrismaClientProvider'),
     IORedis: Symbol.for('IORedis'),
+    FileStorage: Symbol.for('FileStorage'),
+    Server: Symbol.for('Server'),
 };
