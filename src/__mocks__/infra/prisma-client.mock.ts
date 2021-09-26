@@ -6,4 +6,5 @@ export const prismaMock = mockDeep<PrismaClient>({
         // @ts-ignore
         create: () => ({ id: 'id' }),
     },
+    $connect: jest.fn(),
 });

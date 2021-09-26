@@ -10,7 +10,8 @@ import { inject, injectable } from 'inversify';
 import { USE_CASE_TYPES } from '../../../config/dependency-injection/inversify/di-types';
 
 @injectable()
-export class RegisterUserController extends BaseController<AddUserInput,
+export class RegisterUserController extends BaseController<
+    AddUserInput,
     UserLogged
 > {
     constructor(

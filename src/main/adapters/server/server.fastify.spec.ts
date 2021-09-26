@@ -2,11 +2,12 @@ import { fastify } from 'fastify';
 import { adapterToFastifyRoute, ServerFastify } from './server.fastify';
 import { HttpRouteInput } from '../../infra/http/http-router';
 import { HttpMethods } from '../../infra/http/http-methods';
-import { containerDITest } from '../../config/dependency-injection/inversify/containers/di-container-test';
 import { RegisterUserController } from '../../infra/controllers/user/user-register.controller';
+import { getContainerDI } from '../../config/dependency-injection/inversify/containers/di-container';
 
 const serverToListen = new ServerFastify();
-const controller = containerDITest.get<RegisterUserController>(
+const containerDI = getContainerDI();
+const controller = containerDI.get<RegisterUserController>(
     RegisterUserController
 );
 const routes: HttpRouteInput[] = [

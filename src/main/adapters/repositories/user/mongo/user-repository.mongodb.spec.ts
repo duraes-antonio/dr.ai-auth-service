@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { UserRepositoryMongodb } from './user-repository.mongodb';
 import { getContainerDI } from '../../../../config/dependency-injection/inversify/containers/di-container';
-import { PrismaClientProvider } from '../../../../config/dependency-injection/inversify/providers';
+import { PrismaClientProvider } from '../../../../config/dependency-injection/inversify/providers/providers';
 import { INFRA_TYPES } from '../../../../config/dependency-injection/inversify/di-types';
 import { PrismaClient } from '@prisma/client';
 import { AddUserInput } from '../../../../../core/modules/user/core/use-cases/register-user';
@@ -12,9 +12,9 @@ const prismaProvider = containerDI.get<PrismaClientProvider>(
     INFRA_TYPES.PrismaClientProvider
 );
 const repository = new UserRepositoryMongodb(prismaProvider);
-let prisma: PrismaClient;
-
-beforeAll(async () => (prisma = await prismaProvider()));
+const prisma: PrismaClient = containerDI.get<PrismaClient>(
+    INFRA_TYPES.PrismaClient
+);
 
 it('should call prisma findUnique with correct args', async () => {
     const email = 'test@email.com';

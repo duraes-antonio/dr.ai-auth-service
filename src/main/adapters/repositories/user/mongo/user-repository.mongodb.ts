@@ -8,7 +8,7 @@ import { AddUserInput } from '../../../../../core/modules/user/core/use-cases/re
 import { inject, injectable } from 'inversify';
 import { User } from '../../../../../core/modules/user/core/entities/user.model';
 import { EntityId } from '../../../../../core/entities/entity';
-import { PrismaClientProvider } from '../../../../config/dependency-injection/inversify/providers';
+import { PrismaClientProvider } from '../../../../config/dependency-injection/inversify/providers/providers';
 import { INFRA_TYPES } from '../../../../config/dependency-injection/inversify/di-types';
 import { PrismaClient } from '@prisma/client';
 
