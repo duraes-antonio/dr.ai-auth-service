@@ -1,8 +1,14 @@
 import { CacheService } from '../../../core/ports/cache-service/cache-service';
+import { inject, injectable } from 'inversify';
+import { INFRA_TYPES } from '../../config/dependency-injection/inversify/di-types';
 import { Redis } from 'ioredis';
 
+@injectable()
 export class CacheServiceRedis implements CacheService {
-    constructor(private readonly redisDriver: Redis) {}
+    constructor(
+        @inject(INFRA_TYPES.IORedis)
+        private readonly redisDriver: Redis
+    ) {}
 
     async get<K extends string, V>(key: K): Promise<V | null> {
         const valueString = await this.redisDriver.get(key);

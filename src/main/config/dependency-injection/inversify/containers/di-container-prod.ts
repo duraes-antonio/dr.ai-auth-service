@@ -28,6 +28,8 @@ import { factoryFileStorageMock } from '../../../../../__mocks__/adapters/file/f
 import { UserRepositoryMongodb } from '../../../../adapters/repositories/user/mongo/user-repository.mongodb';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientProvider } from '../providers';
+import IORedis from 'ioredis';
+import Redis from 'ioredis';
 
 const containerDIProd = new Container();
 
@@ -77,5 +79,12 @@ containerDIProd
             return client;
         };
     });
+containerDIProd.bind<IORedis.Redis>(INFRA_TYPES.IORedis).toConstantValue(
+    new Redis({
+        port: process.env.REDIS_PORT,
+        host: process.env.REDIS_HOST,
+        password: process.env.REDIS_PASSWORD,
+    })
+);
 
-export {containerDIProd};
+export { containerDIProd };

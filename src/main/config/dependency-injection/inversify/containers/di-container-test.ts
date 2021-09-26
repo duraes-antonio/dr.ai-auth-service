@@ -22,6 +22,8 @@ import { UpdateUserController } from '../../../../infra/controllers/user/user-up
 import { PrismaClientProvider } from '../providers';
 import { PrismaClient } from '@prisma/client';
 import { prismaMock } from '../../../../../__mocks__/infra/prisma-client.mock';
+import IORedis from 'ioredis';
+import { ioRedisMock } from '../../../../../__mocks__/infra/io-redis.mock';
 
 const containerDITest = new Container();
 
@@ -61,7 +63,7 @@ containerDITest
     .bind<UpdateUser>(TYPES.UpdateUser)
     .toDynamicValue(factoryUserRepositoryMock);
 
-// Another dependencies
+// Infra dependencies
 containerDITest.bind<PrismaClient>(PrismaClient).toConstantValue(prismaMock);
 containerDITest
     .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
@@ -69,4 +71,8 @@ containerDITest
         (context) => () =>
             Promise.resolve(context.container.get<PrismaClient>(PrismaClient))
     );
+containerDITest
+    .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
+    .toConstantValue(ioRedisMock);
+
 export { containerDITest };

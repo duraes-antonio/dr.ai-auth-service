@@ -21,4 +21,5 @@ export const USE_CASE_TYPES = {
 export const INFRA_TYPES = {
     PrismaClient: Symbol.for('PrismaClient'),
     PrismaClientProvider: Symbol.for('PrismaClientProvider'),
+    IORedis: Symbol.for('IORedis'),
 };
