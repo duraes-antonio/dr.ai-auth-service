@@ -27,57 +27,60 @@ import { ioRedisMock } from '../../../../../__mocks__/infra/io-redis.mock';
 import { prismaClientProviderWrapper } from '../providers/prisma-client/prisma-client.provider';
 import { CacheService } from '../../../../../core/ports/cache-service/cache-service';
 import { CacheServiceRedis } from '../../../../adapters/cache-service/cache-service.redis';
+import { DIContainerFactory } from './di-container.factory';
 
-const containerDITest = new Container();
+export const getContainerTest: DIContainerFactory = () => {
+    const containerDITest = new Container();
 
-// External adapters
-containerDITest.bind<HashManager>(TYPES.HashManager).to(HashManagerMock);
-containerDITest
-    .bind<EmailValidator>(TYPES.EmailValidator)
-    .to(EmailValidatorMock);
-containerDITest
-    .bind<FileStorage>(INFRA_TYPES.FileStorage)
-    .toDynamicValue(factoryFileStorageMock);
+    // External adapters
+    containerDITest.bind<HashManager>(TYPES.HashManager).to(HashManagerMock);
+    containerDITest
+        .bind<EmailValidator>(TYPES.EmailValidator)
+        .to(EmailValidatorMock);
+    containerDITest
+        .bind<FileStorage>(INFRA_TYPES.FileStorage)
+        .toDynamicValue(factoryFileStorageMock);
 
-// Controllers
-containerDITest
-    .bind<RegisterUserController>(RegisterUserController)
-    .to(RegisterUserController);
-containerDITest
-    .bind<UpdateUserController>(UpdateUserController)
-    .to(UpdateUserController);
+    // Controllers
+    containerDITest
+        .bind<RegisterUserController>(RegisterUserController)
+        .to(RegisterUserController);
+    containerDITest
+        .bind<UpdateUserController>(UpdateUserController)
+        .to(UpdateUserController);
 
-// Use cases
-containerDITest
-    .bind<IRegisterUserCase>(USE_CASE_TYPES.IRegisterUserCase)
-    .to(RegisterUserCase);
-containerDITest
-    .bind<IUpdateUserCase>(USE_CASE_TYPES.IUpdateUserCase)
-    .to(UpdateUserCase);
+    // Use cases
+    containerDITest
+        .bind<IRegisterUserCase>(USE_CASE_TYPES.IRegisterUserCase)
+        .to(RegisterUserCase);
+    containerDITest
+        .bind<IUpdateUserCase>(USE_CASE_TYPES.IUpdateUserCase)
+        .to(UpdateUserCase);
 
-// Repositories
-containerDITest
-    .bind<PersistUser>(TYPES.PersistUser)
-    .toDynamicValue(factoryUserRepositoryMock);
-containerDITest
-    .bind<FindUserByEmail>(TYPES.FindUserByEmail)
-    .toDynamicValue(factoryUserRepositoryMock);
-containerDITest
-    .bind<UpdateUser>(TYPES.UpdateUser)
-    .toDynamicValue(factoryUserRepositoryMock);
+    // Repositories
+    containerDITest
+        .bind<PersistUser>(TYPES.PersistUser)
+        .toDynamicValue(factoryUserRepositoryMock);
+    containerDITest
+        .bind<FindUserByEmail>(TYPES.FindUserByEmail)
+        .toDynamicValue(factoryUserRepositoryMock);
+    containerDITest
+        .bind<UpdateUser>(TYPES.UpdateUser)
+        .toDynamicValue(factoryUserRepositoryMock);
 
-// Infra dependencies
-containerDITest
-    .bind<CacheService>(INFRA_TYPES.CacheService)
-    .to(CacheServiceRedis);
-containerDITest
-    .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
-    .toConstantValue(prismaMock);
-containerDITest
-    .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
-    .toProvider<PrismaClient>(prismaClientProviderWrapper);
-containerDITest
-    .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
-    .toConstantValue(ioRedisMock);
+    // Infra dependencies
+    containerDITest
+        .bind<CacheService>(INFRA_TYPES.CacheService)
+        .to(CacheServiceRedis);
+    containerDITest
+        .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
+        .toConstantValue(prismaMock);
+    containerDITest
+        .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
+        .toProvider<PrismaClient>(prismaClientProviderWrapper);
+    containerDITest
+        .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
+        .toConstantValue(ioRedisMock);
 
-export { containerDITest };
+    return containerDITest;
+};

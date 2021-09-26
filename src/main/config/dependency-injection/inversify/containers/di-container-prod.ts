@@ -27,56 +27,62 @@ import IORedis from 'ioredis';
 import { ioRedisFactory } from '../../../../infra/factories/io-redis.factory';
 import { CacheService } from '../../../../../core/ports/cache-service/cache-service';
 import { CacheServiceRedis } from '../../../../adapters/cache-service/cache-service.redis';
-import { containerDITest } from './di-container-test';
 import { prismaClientProviderWrapper } from '../providers/prisma-client/prisma-client.provider';
+import { DIContainerFactory } from './di-container.factory';
 
-const containerDIProd = new Container();
+export const getContainerProduction: DIContainerFactory = () => {
+    const containerDIProd = new Container();
 
-// Adapters
-containerDIProd
-    .bind<EmailValidator>(TYPES.EmailValidator)
-    .to(EmailValidatorMock);
-containerDIProd
-    .bind<FileStorage>(INFRA_TYPES.FileStorage)
-    .toDynamicValue(factoryFileStorageMock);
-containerDIProd.bind<HashManager>(TYPES.HashManager).to(HashManagerArgon2);
-containerDIProd.bind<Server>(INFRA_TYPES.Server).to(ServerFastify);
+    // Adapters
+    containerDIProd
+        .bind<EmailValidator>(TYPES.EmailValidator)
+        .to(EmailValidatorMock);
+    containerDIProd
+        .bind<FileStorage>(INFRA_TYPES.FileStorage)
+        .toDynamicValue(factoryFileStorageMock);
+    containerDIProd.bind<HashManager>(TYPES.HashManager).to(HashManagerArgon2);
+    containerDIProd.bind<Server>(INFRA_TYPES.Server).to(ServerFastify);
 
-// Infra dependencies
-containerDITest
-    .bind<CacheService>(INFRA_TYPES.CacheService)
-    .to(CacheServiceRedis);
-containerDIProd
-    .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
-    .toConstantValue(new PrismaClient());
-containerDIProd
-    .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
-    .toProvider<PrismaClient>(prismaClientProviderWrapper);
-containerDIProd
-    .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
-    .toConstantValue(ioRedisFactory());
+    // Infra dependencies
+    containerDIProd
+        .bind<CacheService>(INFRA_TYPES.CacheService)
+        .to(CacheServiceRedis);
+    containerDIProd
+        .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
+        .toConstantValue(new PrismaClient());
+    containerDIProd
+        .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
+        .toProvider<PrismaClient>(prismaClientProviderWrapper);
+    containerDIProd
+        .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
+        .toConstantValue(ioRedisFactory());
 
-// Controllers
-containerDIProd
-    .bind<RegisterUserController>(RegisterUserController)
-    .to(RegisterUserController);
-containerDIProd
-    .bind<UpdateUserController>(UpdateUserController)
-    .to(UpdateUserController);
+    // Controllers
+    containerDIProd
+        .bind<RegisterUserController>(RegisterUserController)
+        .to(RegisterUserController);
+    containerDIProd
+        .bind<UpdateUserController>(UpdateUserController)
+        .to(UpdateUserController);
 
-// Use cases
-containerDIProd
-    .bind<IRegisterUserCase>(USE_CASE_TYPES.IRegisterUserCase)
-    .to(RegisterUserCase);
-containerDIProd
-    .bind<IUpdateUserCase>(USE_CASE_TYPES.IUpdateUserCase)
-    .to(UpdateUserCase);
+    // Use cases
+    containerDIProd
+        .bind<IRegisterUserCase>(USE_CASE_TYPES.IRegisterUserCase)
+        .to(RegisterUserCase);
+    containerDIProd
+        .bind<IUpdateUserCase>(USE_CASE_TYPES.IUpdateUserCase)
+        .to(UpdateUserCase);
 
-// Repositories
-containerDIProd.bind<PersistUser>(TYPES.PersistUser).to(UserRepositoryMongodb);
-containerDIProd
-    .bind<FindUserByEmail>(TYPES.FindUserByEmail)
-    .to(UserRepositoryMongodb);
-containerDIProd.bind<UpdateUser>(TYPES.UpdateUser).to(UserRepositoryMongodb);
+    // Repositories
+    containerDIProd
+        .bind<PersistUser>(TYPES.PersistUser)
+        .to(UserRepositoryMongodb);
+    containerDIProd
+        .bind<FindUserByEmail>(TYPES.FindUserByEmail)
+        .to(UserRepositoryMongodb);
+    containerDIProd
+        .bind<UpdateUser>(TYPES.UpdateUser)
+        .to(UserRepositoryMongodb);
 
-export { containerDIProd };
+    return containerDIProd;
+};
