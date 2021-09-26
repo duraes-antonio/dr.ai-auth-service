@@ -1,4 +1,4 @@
-import { prismaClientProvider } from './prisma-client.provider';
+import { prismaClientProviderWrapper } from './prisma-client.provider';
 import { mockDeep } from 'jest-mock-extended';
 import { interfaces } from 'inversify';
 import { INFRA_TYPES } from '../../di-types';
@@ -10,7 +10,7 @@ it('should get prisma client instance and call connect method', async () => {
             get: jest.fn().mockReturnValue(prismaMock),
         },
     });
-    const provider = prismaClientProvider(mockedInversifyContext);
+    const provider = prismaClientProviderWrapper(mockedInversifyContext);
     await provider();
     expect(mockedInversifyContext.container.get).toHaveBeenCalledTimes(1);
     expect(mockedInversifyContext.container.get).toHaveBeenCalledWith(

@@ -25,10 +25,10 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaClientProvider } from '../providers/providers';
 import IORedis from 'ioredis';
 import { ioRedisFactory } from '../../../../infra/factories/io-redis.factory';
-import { prismaClientProvider } from '../providers/prisma-client/prisma-client.provider';
 import { CacheService } from '../../../../../core/ports/cache-service/cache-service';
 import { CacheServiceRedis } from '../../../../adapters/cache-service/cache-service.redis';
 import { containerDITest } from './di-container-test';
+import { prismaClientProviderWrapper } from '../providers/prisma-client/prisma-client.provider';
 
 const containerDIProd = new Container();
 
@@ -51,7 +51,7 @@ containerDIProd
     .toConstantValue(new PrismaClient());
 containerDIProd
     .bind<PrismaClientProvider>(INFRA_TYPES.PrismaClientProvider)
-    .toProvider<PrismaClient>(prismaClientProvider);
+    .toProvider<PrismaClient>(prismaClientProviderWrapper);
 containerDIProd
     .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
     .toConstantValue(ioRedisFactory());
