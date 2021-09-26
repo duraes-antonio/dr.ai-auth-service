@@ -23,7 +23,7 @@ import { PrismaClientProvider } from '../providers/providers';
 import { PrismaClient } from '@prisma/client';
 import { prismaMock } from '../../../../../__mocks__/infra/prisma-client.mock';
 import IORedis from 'ioredis';
-import { ioRedisMock } from '../../../../../__mocks__/infra/io-redis.mock';
+import { ioRedisFactory } from '../../../../../__mocks__/infra/io-redis.mock';
 import { prismaClientProviderWrapper } from '../providers/prisma-client/prisma-client.provider';
 import { CacheService } from '../../../../../core/ports/cache-service/cache-service';
 import { CacheServiceRedis } from '../../../../adapters/cache-service/cache-service.redis';
@@ -80,7 +80,7 @@ export const getContainerTest: DIContainerFactory = () => {
         .toProvider<PrismaClient>(prismaClientProviderWrapper);
     containerDITest
         .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
-        .toConstantValue(ioRedisMock);
+        .toDynamicValue(ioRedisFactory);
 
     return containerDITest;
 };

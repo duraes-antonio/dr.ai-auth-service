@@ -7,11 +7,14 @@ export const cacheStoredValue = {
     value: 'value',
 };
 
-export const ioRedisMock = mockDeep<IORedis.Redis>();
+export function ioRedisFactory(): IORedis.Redis {
+    const ioRedisMock = mockDeep<IORedis.Redis>();
 
-when(ioRedisMock.get)
-    // @ts-ignore
-    .calledWith(cacheStoredValue.key)
-    .mockImplementation(() =>
-        Promise.resolve(JSON.stringify(cacheStoredValue))
-    );
+    when(ioRedisMock.get)
+        // @ts-ignore
+        .calledWith(cacheStoredValue.key)
+        .mockImplementation(() =>
+            Promise.resolve(JSON.stringify(cacheStoredValue))
+        );
+    return ioRedisMock;
+}

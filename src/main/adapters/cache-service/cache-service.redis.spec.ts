@@ -6,12 +6,19 @@ import IORedis from 'ioredis';
 import { INFRA_TYPES } from '../../config/dependency-injection/inversify/di-types';
 
 const containerDI = getContainerDI();
-const driverRedis = containerDI.get<IORedis.Redis>(INFRA_TYPES.IORedis);
-const service = new CacheServiceRedis(driverRedis);
+
+function makeSut() {
+    const driverRedis = containerDI.get<IORedis.Redis>(INFRA_TYPES.IORedis);
+    return {
+        driverRedis,
+        service: new CacheServiceRedis(driverRedis),
+    };
+}
 
 it('should call Redis driver method to store the value', () => {
     const expectedKey = 'key';
     const expectedValue = { name: 'Name' };
+    const { service, driverRedis } = makeSut();
     jest.spyOn(driverRedis, 'set');
 
     service.set(expectedKey, expectedValue);
@@ -23,11 +30,26 @@ it('should call Redis driver method to store the value', () => {
     );
 });
 
-it('should call Redis driver method to retrieves stored value', async () => {
-    jest.spyOn(driverRedis, 'get');
+const getExpected: { key: string; value: unknown }[] = [
+    {
+        key: cacheStoredValue.key,
+        value: cacheStoredValue,
+    },
+    {
+        key: 'key-invalid',
+        value: null,
+    },
+];
 
-    const value = await service.get(cacheStoredValue.key);
+it.each(getExpected)(
+    'should call Redis driver method to retrieves stored value (key: %s)',
+    async ({ key, value }) => {
+        const { service, driverRedis } = makeSut();
 
-    expect(driverRedis.get).toHaveBeenCalledTimes(1);
-    expect(value).toEqual(cacheStoredValue);
-});
+        jest.spyOn(driverRedis, 'get');
+        const storedValue = await service.get(key);
+
+        expect(driverRedis.get).toHaveBeenCalledTimes(1);
+        expect(storedValue).toEqual(value);
+    }
+);
