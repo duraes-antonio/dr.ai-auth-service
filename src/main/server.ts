@@ -1,4 +1,4 @@
-import { USER_ROUTES } from './infra/routes/user.routes';
+import { USER_ROUTES } from './infra/routes/user/user.routes';
 import { getContainerDI } from './config/dependency-injection/inversify/containers/di-container';
 import { Server } from './infra/http/server';
 import { INFRA_TYPES } from './config/dependency-injection/inversify/di-types';

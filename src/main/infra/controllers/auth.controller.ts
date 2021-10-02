@@ -6,7 +6,7 @@ import { ILogoutCase } from '../../../core/modules/auth/core/use-cases/logout';
 import { BaseController, ControllerSuccessResponse } from './base.controller';
 import { UserLogged } from '../../../core/modules/user/core/use-cases/register-user';
 import { StatusCodes } from 'http-status-codes';
-import { SessionStore } from '../http/session';
+import { SessionStore } from '../../../core/ports/session-storage/session-storage';
 
 export class LoginController extends BaseController {
     constructor(
