@@ -7,11 +7,15 @@ import { prismaMock } from '../../../../../../__mocks__/infra/prisma-client.mock
 it('should get prisma client instance and call connect method', async () => {
     const mockedInversifyContext = mockDeep<interfaces.Context>({
         container: {
+            // @ts-ignore
             get: jest.fn().mockReturnValue(prismaMock),
         },
     });
     const provider = prismaClientProviderWrapper(mockedInversifyContext);
+    jest.spyOn(prismaMock, '$connect');
+
     await provider();
+
     expect(mockedInversifyContext.container.get).toHaveBeenCalledTimes(1);
     expect(mockedInversifyContext.container.get).toHaveBeenCalledWith(
         INFRA_TYPES.PrismaClient

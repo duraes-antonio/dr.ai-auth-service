@@ -1,10 +1,25 @@
 import { PrismaClient } from '@prisma/client';
-import { mockDeep } from 'jest-mock-extended';
+import { Mock } from 'moq.ts';
 
-export const prismaMock = mockDeep<PrismaClient>({
-    user: {
-        // @ts-ignore
-        create: () => ({ id: 'id' }),
-    },
-    $connect: jest.fn(),
-});
+const prismaMock = new Mock<PrismaClient>()
+    .setup((instance) => instance.$connect)
+    .returns(() => Promise.resolve(undefined))
+
+    .setup((instance) => instance.user.findUnique)
+    // @ts-ignore
+    .returns(() => Promise.resolve(undefined))
+
+    .setup((instance) => instance.user.create)
+    // @ts-ignore
+    .returns(() => Promise.resolve({ id: 'id' }))
+
+    .setup((instance) => instance.user.update)
+    // @ts-ignore
+    .returns(() => Promise.resolve(undefined))
+
+    .setup((instance) => instance.$connect)
+    .returns(() => Promise.resolve(undefined))
+
+    .object();
+
+export { prismaMock };

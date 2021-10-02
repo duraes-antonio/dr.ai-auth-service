@@ -61,6 +61,6 @@ export class RegisterUserCase implements IRegisterUserCase {
 
         const userId = await this.persistUser.persist(userToPersist);
 
-        return { ...input, id: userId };
+        return { id: userId, email: input.email, name: input.name };
     }
 }

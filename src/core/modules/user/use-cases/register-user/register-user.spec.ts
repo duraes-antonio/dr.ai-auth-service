@@ -103,7 +103,11 @@ it('should generate a user data with hashed password', async () => {
 
 it('should return a user data with user id', async () => {
     const { useCaseInstance } = makeSut();
-    const expectedUser: UserLogged = { ...inputNewUser, id: userIdMock };
+    const expectedUser: UserLogged = {
+        name: inputNewUser.name,
+        email: inputNewUser.email,
+        id: userIdMock,
+    };
     const userSaved = await useCaseInstance.execute(inputNewUser);
     expect(userSaved).toEqual(expectedUser);
 });
