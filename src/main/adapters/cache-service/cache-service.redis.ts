@@ -18,4 +18,8 @@ export class CacheServiceRedis implements CacheService {
     async set<K extends string, V>(key: K, value: V): Promise<void> {
         await this.redisDriver.set(key, JSON.stringify(value));
     }
+
+    async remove<K extends string>(key: K): Promise<void> {
+        await this.redisDriver.del(key);
+    }
 }

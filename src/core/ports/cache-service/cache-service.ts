@@ -12,4 +12,10 @@ export interface CacheService {
      * @returns Value if existing, otherwise undefined
      */
     get<K extends string, V>(key: K): Promise<V | null>;
+
+    /***
+     * Remove the value related to input key
+     * @param key Key that identifies value
+     */
+    remove<K extends string, V>(key: K): Promise<void>;
 }

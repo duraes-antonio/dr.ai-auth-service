@@ -6,6 +6,7 @@ import IORedis from 'ioredis';
 import { INFRA_TYPES } from '../../config/dependency-injection/inversify/di-types';
 
 const containerDI = getContainerDI();
+const expectedKey = 'key';
 
 function makeSut() {
     const driverRedis = containerDI.get<IORedis.Redis>(INFRA_TYPES.IORedis);
@@ -16,7 +17,6 @@ function makeSut() {
 }
 
 it('should call Redis driver method to store the value', () => {
-    const expectedKey = 'key';
     const expectedValue = { name: 'Name' };
     const { service, driverRedis } = makeSut();
     jest.spyOn(driverRedis, 'set');
@@ -53,3 +53,13 @@ it.each(getExpected)(
         expect(storedValue).toEqual(value);
     }
 );
+
+it('should call Redis driver method to remove stored value', async () => {
+    const { service, driverRedis } = makeSut();
+
+    jest.spyOn(driverRedis, 'del');
+    await service.remove(expectedKey);
+
+    expect(driverRedis.del).toHaveBeenCalledTimes(1);
+    expect(driverRedis.del).toHaveBeenCalledWith(expectedKey);
+});
