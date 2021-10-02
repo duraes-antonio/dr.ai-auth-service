@@ -1,16 +1,16 @@
 import { fastify } from 'fastify';
 import { adapterToFastifyRoute, ServerFastify } from './server.fastify';
-import { HttpRouteInput } from '../../infra/http/http-router';
-import { HttpMethods } from '../../infra/http/http-methods';
+import { HttpMethods, HttpRouteInput } from '../../infra/http/http.models';
 import { RegisterUserController } from '../../infra/controllers/user/user-register.controller';
 import { getContainerDI } from '../../config/dependency-injection/inversify/containers/di-container';
+import { BaseController } from '../../infra/controllers/base.controller';
 
 const serverToListen = new ServerFastify();
 const containerDI = getContainerDI();
 const controller = containerDI.get<RegisterUserController>(
     RegisterUserController
 );
-const routes: HttpRouteInput[] = [
+const routes: HttpRouteInput<BaseController>[] = [
     {
         method: HttpMethods.POST,
         url: 'test',

@@ -2,9 +2,15 @@ import 'reflect-metadata';
 import { fastify, RouteOptions } from 'fastify';
 import http from 'http';
 import { Server } from '../../infra/http/server';
-import { HttpRouteInput } from '../../infra/http/http-router';
+import { HttpRequest, HttpRouteInput } from '../../infra/http/http.models';
 import { RouteGenericInterface } from 'fastify/types/route';
 import { injectable } from 'inversify';
+import FastifySessionPlugin from 'fastify-session';
+import fastifyCookie from 'fastify-cookie';
+import { RequestSession } from '../../infra/http/session';
+import { BaseController } from '../../infra/controllers/base.controller';
+
+const fastifySession = require('fastify-session');
 
 type FastifyRouteOptions = RouteOptions<
     http.Server,
@@ -15,13 +21,31 @@ type FastifyRouteOptions = RouteOptions<
 >;
 
 export function adapterToFastifyRoute(
-    route: HttpRouteInput
+    route: HttpRouteInput<BaseController>
 ): FastifyRouteOptions {
     const { handler, method, url } = route;
     return {
-        handler: async (request, reply) => {
-            const body = request.body;
-            const { code, result, errors } = await handler.handle(body);
+        handler: async (fastifyRequest, reply) => {
+            const genericRequest: HttpRequest = {
+                session:
+                    (fastifyRequest.session as unknown as RequestSession) ??
+                    undefined,
+                body: fastifyRequest.body,
+                query: fastifyRequest.query,
+            };
+            const response = await handler.handle(fastifyRequest.body);
+            const { code, result, errors } = response;
+
+            if (route.postHandler) {
+                const updatedRequest = route.postHandler(
+                    genericRequest,
+                    response
+                );
+                fastifyRequest.session = {
+                    ...fastifyRequest.session,
+                    ...updatedRequest.session,
+                };
+            }
             reply.status(code).send(errors?.length ? { errors } : result);
         },
         method,
@@ -33,7 +57,21 @@ export function adapterToFastifyRoute(
 export class ServerFastify implements Server {
     readonly fastifyInstance = fastify<http.Server>({ logger: true });
 
-    configureRoutes(routes: HttpRouteInput[]): void {
+    constructor() {
+        const sessionOptions: FastifySessionPlugin.Options = {
+            cookieName: 'session',
+            cookie: {
+                secure: false,
+                maxAge: this.hoursToMilliseconds(1),
+            },
+            secret: process.env.SESSION_KEY as string,
+        };
+        this.fastifyInstance
+            .register(fastifyCookie)
+            .register(fastifySession, sessionOptions);
+    }
+
+    configureRoutes(routes: HttpRouteInput<BaseController>[]): void {
         routes.forEach((input) =>
             this.fastifyInstance.route(adapterToFastifyRoute(input))
         );
@@ -41,5 +79,10 @@ export class ServerFastify implements Server {
 
     async listen(port: number | string): Promise<void> {
         await this.fastifyInstance.listen(port);
+    }
+
+    private hoursToMilliseconds(lifetimeInHours: number): number {
+        // milliseconds * seconds * minutes * hours
+        return 1000 * 60 * 60 * lifetimeInHours;
     }
 }
