@@ -7,7 +7,7 @@ export const cacheStoredValue = {
     value: 'value',
 };
 
-export function ioRedisFactory(): IORedis.Redis {
+export function factoryIoRedis(): IORedis.Redis {
     const ioRedisMock = mockDeep<IORedis.Redis>();
 
     when(ioRedisMock.get)
