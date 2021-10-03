@@ -6,6 +6,7 @@ import { interfaces } from 'inversify';
 export async function setupPrismaClient(
     prismaInstance: PrismaClient
 ): Promise<PrismaClient> {
+    console.log('*************************', process.env.TEST_VAR);
     await prismaInstance.$connect();
     return prismaInstance;
 }
