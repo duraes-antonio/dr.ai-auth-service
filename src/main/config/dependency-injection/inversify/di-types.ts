@@ -20,4 +20,5 @@ export const INFRA_TYPES = {
     PrismaClient: Symbol.for('PrismaClient'),
     PrismaClientProvider: Symbol.for('PrismaClientProvider'),
     Server: Symbol.for('Server'),
+    SessionStore: Symbol.for('SessionStore'),
 };

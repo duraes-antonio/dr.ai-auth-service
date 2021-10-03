@@ -10,7 +10,7 @@ import { IRegisterUserCase } from '../../../../../core/modules/user/core/use-cas
 import { RegisterUserCase } from '../../../../../core/modules/user/use-cases/register-user/register-user';
 import { IUpdateUserCase } from '../../../../../core/modules/user/core/use-cases/update-user';
 import { UpdateUserCase } from '../../../../../core/modules/user/use-cases/update-user/update-user';
-import { RegisterUserController } from '../../../../infra/controllers/user/user-register.controller';
+import { RegisterUserController } from '../../../../infra/controllers/user/register/user-register.controller';
 import { EmailValidator } from '../../../../../core/ports/validation/validators/email.validator';
 import { EmailValidatorMock } from '../../../../../__mocks__/adapters/validators/email-validator.mock';
 import { HashManagerArgon2 } from '../../../../adapters/hash-manager/argon2/hash-manager-argon2';
@@ -29,6 +29,8 @@ import { CacheService } from '../../../../../core/ports/cache-service/cache-serv
 import { CacheServiceRedis } from '../../../../adapters/cache-service/cache-service.redis';
 import { prismaClientProviderWrapper } from '../providers/prisma-client/prisma-client.provider';
 import { DIContainerFactory } from './di-container.factory';
+import { SessionStore } from '../../../../../core/ports/session-storage/session-storage';
+import { SessionStorageRedis } from '../../../../adapters/session-storage/redis/session-storage.redis';
 
 export const getContainerProduction: DIContainerFactory = () => {
     const containerDIProd = new Container();
@@ -56,6 +58,9 @@ export const getContainerProduction: DIContainerFactory = () => {
     containerDIProd
         .bind<IORedis.Redis>(INFRA_TYPES.IORedis)
         .toConstantValue(ioRedisFactory());
+    containerDIProd
+        .bind<SessionStore>(INFRA_TYPES.SessionStore)
+        .to(SessionStorageRedis);
 
     // Controllers
     containerDIProd

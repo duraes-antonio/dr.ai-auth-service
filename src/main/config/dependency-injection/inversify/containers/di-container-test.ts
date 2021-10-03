@@ -11,7 +11,7 @@ import { HashManager } from '../../../../../core/ports/hash-manager/hash-manager
 import { HashManagerMock } from '../../../../../__mocks__/adapters/hash-manager/hash-manager.mock';
 import { EmailValidator } from '../../../../../core/ports/validation/validators/email.validator';
 import { EmailValidatorMock } from '../../../../../__mocks__/adapters/validators/email-validator.mock';
-import { RegisterUserController } from '../../../../infra/controllers/user/user-register.controller';
+import { RegisterUserController } from '../../../../infra/controllers/user/register/user-register.controller';
 import { IRegisterUserCase } from '../../../../../core/modules/user/core/use-cases/register-user';
 import { IUpdateUserCase } from '../../../../../core/modules/user/core/use-cases/update-user';
 import { RegisterUserCase } from '../../../../../core/modules/user/use-cases/register-user/register-user';
@@ -28,6 +28,8 @@ import { prismaClientProviderWrapper } from '../providers/prisma-client/prisma-c
 import { CacheService } from '../../../../../core/ports/cache-service/cache-service';
 import { CacheServiceRedis } from '../../../../adapters/cache-service/cache-service.redis';
 import { DIContainerFactory } from './di-container.factory';
+import { SessionStore } from '../../../../../core/ports/session-storage/session-storage';
+import { factorySessionStorageMock } from '../../../../../__mocks__/adapters/session-store/session-store.mock';
 
 export const getContainerTest: DIContainerFactory = () => {
     const containerDITest = new Container();
@@ -72,6 +74,9 @@ export const getContainerTest: DIContainerFactory = () => {
     containerDITest
         .bind<CacheService>(INFRA_TYPES.CacheService)
         .to(CacheServiceRedis);
+    containerDITest
+        .bind<SessionStore>(INFRA_TYPES.SessionStore)
+        .toDynamicValue(factorySessionStorageMock);
     containerDITest
         .bind<PrismaClient>(INFRA_TYPES.PrismaClient)
         .toConstantValue(prismaMock);
