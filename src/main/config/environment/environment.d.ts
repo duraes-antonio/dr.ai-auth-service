@@ -14,7 +14,6 @@ declare global {
             REDIS_PASSWORD: string;
 
             SESSION_KEY: string;
-            SESSION_SALT: string;
 
             NODE_ENV: EnvironmentType;
             PORT?: string;
