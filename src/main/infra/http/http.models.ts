@@ -21,10 +21,10 @@ export interface HttpRouteInput<C extends BaseController> {
     method: HttpMethods;
     url: string;
     handler: C;
-    postHandler?: RoutePostHandler<ThenArg<ReturnType<C['handle']>>>;
+    postHandler?: RoutePostHandler<C>;
 }
 
-export type RoutePostHandler<Out = unknown> = (
+export type RoutePostHandler<C extends BaseController> = (
     req: HttpRequest,
-    output: Out
+    output: ThenArg<ReturnType<C['handle']>>
 ) => HttpRequest;

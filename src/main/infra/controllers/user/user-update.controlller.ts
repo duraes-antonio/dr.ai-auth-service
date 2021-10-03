@@ -7,6 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 import { BaseController, ControllerSuccessResponse } from '../base.controller';
 import { inject, injectable } from 'inversify';
 import { USE_CASE_TYPES } from '../../../config/dependency-injection/inversify/di-types';
+import { HttpRequest } from '../../http/http.models';
 
 @injectable()
 export class UpdateUserController extends BaseController<
@@ -21,6 +22,7 @@ export class UpdateUserController extends BaseController<
     }
 
     protected async handleRequest(
+        request: HttpRequest,
         input: UpdateUserInput
     ): Promise<ControllerSuccessResponse<void>> {
         const result = await this.updateUseCase.execute(input);

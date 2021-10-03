@@ -1,9 +1,10 @@
-import { fastify } from 'fastify';
+import { fastify, FastifyRequest } from 'fastify';
 import { adapterToFastifyRoute, ServerFastify } from './server.fastify';
 import { HttpMethods, HttpRouteInput } from '../../infra/http/http.models';
-import { RegisterUserController } from '../../infra/controllers/user/user-register.controller';
+import { RegisterUserController } from '../../infra/controllers/user/register/user-register.controller';
 import { getContainerDI } from '../../config/dependency-injection/inversify/containers/di-container';
 import { BaseController } from '../../infra/controllers/base.controller';
+import { mockDeep } from 'jest-mock-extended';
 
 const serverToListen = new ServerFastify();
 const containerDI = getContainerDI();
@@ -49,7 +50,7 @@ it('should attach routes on fastify instance when configureRoutes is called', ()
 
 it('should mapper a generic route to fastify route', async () => {
     const genericRoute = routes[0];
-    const request = jest.fn().mockImplementation();
+    const request = mockDeep<FastifyRequest>();
     const reply: { status: Function; send: Function } = {
         status: jest.fn(() => reply),
         send: jest.fn(() => reply),

@@ -1,13 +1,12 @@
 import 'reflect-metadata';
-import { fastify, RouteOptions } from 'fastify';
 import http from 'http';
+import fastifyCookie from 'fastify-cookie';
+import FastifySessionPlugin from 'fastify-session';
+import { fastify, RouteOptions } from 'fastify';
+import { injectable } from 'inversify';
 import { Server } from '../../infra/http/server';
 import { HttpRequest, HttpRouteInput } from '../../infra/http/http.models';
 import { RouteGenericInterface } from 'fastify/types/route';
-import { injectable } from 'inversify';
-import FastifySessionPlugin from 'fastify-session';
-import fastifyCookie from 'fastify-cookie';
-import { RequestSession } from '../../infra/http/session';
 import { BaseController } from '../../infra/controllers/base.controller';
 
 const fastifySession = require('fastify-session');
@@ -26,26 +25,15 @@ export function adapterToFastifyRoute(
     const { handler, method, url } = route;
     return {
         handler: async (fastifyRequest, reply) => {
-            const genericRequest: HttpRequest = {
-                session:
-                    (fastifyRequest.session as unknown as RequestSession) ??
-                    undefined,
+            const request: HttpRequest = {
+                session: {
+                    sessionId: fastifyRequest.session.sessionId,
+                },
                 body: fastifyRequest.body,
                 query: fastifyRequest.query,
             };
-            const response = await handler.handle(fastifyRequest.body);
+            const response = await handler.handle(request, fastifyRequest.body);
             const { code, result, errors } = response;
-
-            if (route.postHandler) {
-                const updatedRequest = route.postHandler(
-                    genericRequest,
-                    response
-                );
-                fastifyRequest.session = {
-                    ...fastifyRequest.session,
-                    ...updatedRequest.session,
-                };
-            }
             reply.status(code).send(errors?.length ? { errors } : result);
         },
         method,
