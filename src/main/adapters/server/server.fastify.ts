@@ -44,6 +44,7 @@ export function adapterToFastifyRoute(
 @injectable()
 export class ServerFastify implements Server {
     readonly fastifyInstance = fastify<http.Server>({ logger: true });
+    readonly EMPTY_SESSION_KEY = 'EMPTY';
 
     constructor() {
         const sessionOptions: FastifySessionPlugin.Options = {
@@ -52,7 +53,7 @@ export class ServerFastify implements Server {
                 secure: false,
                 maxAge: this.hoursToMilliseconds(1),
             },
-            secret: process.env.SESSION_KEY as string,
+            secret: process.env.SESSION_KEY ?? this.EMPTY_SESSION_KEY,
         };
         this.fastifyInstance
             .register(fastifyCookie)
