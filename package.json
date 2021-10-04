@@ -2,13 +2,12 @@
 	"name": "dr.ai-auth-service",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "dist/index.js",
 	"scripts": {
-		"build": "yarn tsc",
-		"start": "node index.js",
-		"clean": "npx rimraf app",
+		"build": "tsc -p . && prisma generate",
+		"clean": "npx rimraf dist",
 		"dev": "set NODE_ENV=dev&& yarn clean && yarn build && nodemon",
-		"prod": "set NODE_ENV=prod&& yarn clean && node app/index",
+		"prod": "set NODE_ENV=prod&& yarn clean && node dist/index.js",
 		"test": "set NODE_ENV=test&& jest --watch --coverage",
 		"test:ci": "set NODE_ENV=test&& jest --coverage --ci --detectOpenHandles",
 		"test:coverage": "jest --watch --collect-coverage"
