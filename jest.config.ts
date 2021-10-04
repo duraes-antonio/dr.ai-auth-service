@@ -3,7 +3,7 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
     verbose: true,
     moduleFileExtensions: ['js', 'ts', 'tsx'],
-    modulePathIgnorePatterns: ['<rootDir>/dist/'],
+    modulePathIgnorePatterns: ['<rootDir>/app/'],
     injectGlobals: true,
     testEnvironment: 'node',
 };
