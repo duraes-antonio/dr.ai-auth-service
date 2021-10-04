@@ -3,14 +3,14 @@
 	"name": "programming-languages-api",
 	"builds": [
 		{
-			"src": "app/src/index.js",
+			"src": "app/index.js",
 			"use": "@vercel/node"
 		}
 	],
 	"routes": [
 		{
 			"src": "app/(.*)",
-			"dest": "app/src/index.js"
+			"dest": "app/index.js"
 		}
 	]
 }

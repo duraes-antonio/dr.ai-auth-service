@@ -1,4 +1,4 @@
-import { server } from './main';
+import { server } from './src/main';
 
 const dotenv = require('dotenv');
 const path = require('path');
