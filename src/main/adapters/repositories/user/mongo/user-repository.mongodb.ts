@@ -35,7 +35,7 @@ export class UserRepositoryMongodb
                 name: true,
                 password: false,
             },
-        })) as User | null;
+        })) as unknown as User | null;
         return userDto ?? undefined;
     }
 
