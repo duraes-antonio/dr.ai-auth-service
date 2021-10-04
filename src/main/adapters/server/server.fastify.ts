@@ -44,7 +44,7 @@ export function adapterToFastifyRoute(
 @injectable()
 export class ServerFastify implements Server {
     readonly fastifyInstance = fastify<http.Server>({ logger: true });
-    readonly EMPTY_SESSION_KEY = 'EMPTY';
+    readonly EMPTY_SESSION_KEY = 'nPy3BcPwVJ7P4aP6sXzOQbAvpQHxPx7l';
 
     constructor() {
         const sessionOptions: FastifySessionPlugin.Options = {
