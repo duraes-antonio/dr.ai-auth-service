@@ -5,7 +5,7 @@
 	"main": "dist/src/index.js",
 	"scripts": {
 		"build": "yarn tsc",
-		"start": "npm run build && node dist/src",
+		"start": "npm run build && node dist/src/index.js",
 		"clean": "npx rimraf dist",
 		"dev": "set NODE_ENV=dev&& yarn clean && yarn build && nodemon",
 		"prod": "set NODE_ENV=prod&& yarn clean && node dist/src",
