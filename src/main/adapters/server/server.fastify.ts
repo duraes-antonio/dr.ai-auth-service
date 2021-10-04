@@ -64,6 +64,13 @@ export class ServerFastify implements Server {
         routes.forEach((input) =>
             this.fastifyInstance.route(adapterToFastifyRoute(input))
         );
+        this.fastifyInstance.route({
+            method: 'GET',
+            url: 'api/test',
+            handler: (request, reply) => {
+                reply.status(200).send('OK');
+            },
+        });
     }
 
     async listen(port: number | string): Promise<void> {
