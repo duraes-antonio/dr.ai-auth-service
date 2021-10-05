@@ -7,8 +7,6 @@ on:
         branches: [ master ]
 
 env:
-    AZURE_WEBAPP_NAME: drai-auth
-    AZURE_WEBAPP_PACKAGE_PATH: '.'
     NODE_VERSION: '14.x'
 
 jobs:
@@ -24,16 +22,16 @@ jobs:
             -   uses: actions/setup-node@v2
                 with:
                     node-version: ${{ env.NODE_VERSION }}
-                    cache: 'npm'
+                    cache: 'yarn'
 
             -   name: Install dependencies
-                run: npm install
+                run: yarn install
 
             -   name: Build
-                run: npm run build --if-present
+                run: yarn build --if-present
 
             -   name: run Tests
-                run: npm run test:ci
+                run: yarn test:ci
 
             -   name: SonarCloud Scan
                 uses: SonarSource/sonarcloud-github-action@master
@@ -54,15 +52,5 @@ jobs:
                 with:
                     node-version: ${{ env.NODE_VERSION }}
 
-            -   name: Install dependencies
-                run: npm install
-
-            -   name: Build
-                run: npm run build --if-present
-
-            -   name: 'Deploy to Azure WebApp'
-                uses: azure/webapps-deploy@0b651ed7546ecfc75024011f76944cb9b381ef1e
-                with:
-                    app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                    publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-                    package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            -   name: 'Deploy to Vercel'
+                run: yarn deploy
