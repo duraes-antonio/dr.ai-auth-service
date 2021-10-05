@@ -9,5 +9,5 @@
 		"src/**/__mocks__/",
 		"src/**/__mocks__"
 	],
-	"exec": "ts-node ./index.ts"
+	"exec": "ts-node ./src/index.ts"
 }
