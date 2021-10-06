@@ -3,12 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"build": "tsc -p . && prisma generate",
-		"clean": "npx rimraf dist",
-		"start": "npx vercel dev",
 		"deploy": "npx vercel deploy --prod",
-		"dev": "set NODE_ENV=dev&& yarn clean && yarn build && nodemon",
-		"test": "set NODE_ENV=test&& jest --watch --coverage",
 		"test:ci": "set NODE_ENV=test&& jest --coverage --ci --detectOpenHandles"
 	},
 	"keywords": [],
@@ -31,6 +26,7 @@
 		"yarn": "^1.22.11"
 	},
 	"devDependencies": {
+		"@vercel/node": "^1.11.1",
 		"@babel/core": "^7.15.5",
 		"@babel/plugin-proposal-decorators": "^7.15.4",
 		"@babel/preset-env": "^7.15.4",
@@ -51,6 +47,6 @@
 		"prisma": "^3.0.2"
 	},
 	"prisma": {
-		"schema": "api/main/infra/database/database-schemas/schema.prisma"
+		"schema": "src/main/infra/database/database-schemas/schema.prisma"
 	}
 }

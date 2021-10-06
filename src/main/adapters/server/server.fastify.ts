@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import http from 'http';
 import fastifyCookie from 'fastify-cookie';
 import FastifySessionPlugin from 'fastify-session';
-import { fastify, RouteOptions } from 'fastify';
+import { fastify, FastifyInstance, RouteOptions } from 'fastify';
 import { injectable } from 'inversify';
 import { Server } from '../../infra/http/server';
 import { HttpRequest, HttpRouteInput } from '../../infra/http/http.models';
@@ -41,19 +41,20 @@ export function adapterToFastifyRoute(
     };
 }
 
+const EMPTY_SESSION_KEY = 'nPy3BcPwVJ7P4aP6sXzOQbAvpQHxPx7l';
+
 @injectable()
 export class ServerFastify implements Server {
     readonly fastifyInstance = fastify<http.Server>({ logger: true });
-    readonly EMPTY_SESSION_KEY = 'nPy3BcPwVJ7P4aP6sXzOQbAvpQHxPx7l';
 
     constructor() {
         const sessionOptions: FastifySessionPlugin.Options = {
             cookieName: 'session',
             cookie: {
                 secure: false,
-                maxAge: this.hoursToMilliseconds(1),
+                maxAge: hoursToMilliseconds(1),
             },
-            secret: process.env.SESSION_KEY ?? this.EMPTY_SESSION_KEY,
+            secret: process.env.SESSION_KEY ?? EMPTY_SESSION_KEY,
         };
         this.fastifyInstance
             .register(fastifyCookie)
@@ -69,9 +70,28 @@ export class ServerFastify implements Server {
     async listen(port: number | string): Promise<void> {
         await this.fastifyInstance.listen(port);
     }
+}
 
-    private hoursToMilliseconds(lifetimeInHours: number): number {
-        // milliseconds * seconds * minutes * hours
-        return 1000 * 60 * 60 * lifetimeInHours;
-    }
+export function configureServer(instance: FastifyInstance): void {
+    const sessionOptions: FastifySessionPlugin.Options = {
+        cookieName: 'session',
+        cookie: {
+            secure: false,
+            maxAge: hoursToMilliseconds(1),
+        },
+        secret: process.env.SESSION_KEY ?? EMPTY_SESSION_KEY,
+    };
+    instance.register(fastifyCookie).register(fastifySession, sessionOptions);
+}
+
+export function setRoutes(
+    instance: FastifyInstance,
+    routes: HttpRouteInput<BaseController>[]
+): void {
+    routes.forEach((input) => instance.route(adapterToFastifyRoute(input)));
+}
+
+export function hoursToMilliseconds(lifetimeInHours: number): number {
+    // milliseconds * seconds * minutes * hours
+    return 1000 * 60 * 60 * lifetimeInHours;
 }
