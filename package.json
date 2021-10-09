@@ -2,16 +2,14 @@
 	"name": "dr.ai-auth-service",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
 	"scripts": {
-		"build": "yarn tsc",
-		"start": "npm run build && node src",
+		"build": "tsc -p . && prisma generate",
 		"clean": "npx rimraf dist",
-		"dev": "set NODE_ENV=dev&& yarn clean && tsc && nodemon",
-		"prod": "set NODE_ENV=prod&& yarn clean && node dist/src",
+		"start": "npx vercel dev",
+		"deploy": "npx vercel deploy --prod",
+		"dev": "set NODE_ENV=dev&& yarn clean && yarn build && nodemon",
 		"test": "set NODE_ENV=test&& jest --watch --coverage",
-		"test:ci": "set NODE_ENV=test&& jest --coverage --ci --detectOpenHandles",
-		"test:coverage": "jest --watch --collect-coverage"
+		"test:ci": "set NODE_ENV=test&& jest --coverage --ci --detectOpenHandles"
 	},
 	"keywords": [],
 	"author": "",
@@ -21,7 +19,9 @@
 		"argon2": "^0.28.2",
 		"dotenv": "^10.0.0",
 		"fastify": "^3.20.2",
+		"fastify-cookie": "^5.3.1",
 		"fastify-cors": "^6.0.2",
+		"fastify-session": "^5.2.1",
 		"http-status-codes": "^2.1.4",
 		"inversify": "^5.1.1",
 		"ioredis": "^4.27.9",
@@ -51,6 +51,6 @@
 		"prisma": "^3.0.2"
 	},
 	"prisma": {
-		"schema": "src/main/infra/database/database-schemas/schema.prisma"
+		"schema": "api/main/infra/database/database-schemas/schema.prisma"
 	}
 }

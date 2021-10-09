@@ -1,13 +1,13 @@
 {
 	"watch": [
-		"src"
+		"api"
 	],
 	"ext": "ts,json",
 	"ignore": [
-		"src/**/*.spec.ts",
-		"src/**/__mocks__/*",
-		"src/**/__mocks__/",
-		"src/**/__mocks__"
+		"api/**/*.spec.ts",
+		"api/**/__mocks__/*",
+		"api/**/__mocks__/",
+		"api/**/__mocks__"
 	],
-	"exec": "ts-node ./src/index.ts"
+	"exec": "ts-node ./api/index.ts"
 }
